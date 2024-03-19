@@ -28,7 +28,6 @@ import { LogMiddleware } from './common/middleware/log-middleware';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
-      // 데이터베이스 타입
       type: 'postgres',
       host: process.env[ENV_DB_HOST_KEY],
       port: parseInt(process.env[ENV_HOST_KEY]),
