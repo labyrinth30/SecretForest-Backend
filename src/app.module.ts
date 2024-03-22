@@ -18,6 +18,7 @@ import {
   ENV_HOST_KEY,
 } from './common/const/env-keys.const';
 import { LogMiddleware } from './common/middleware/log-middleware';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { LogMiddleware } from './common/middleware/log-middleware';
       entities: [],
       synchronize: true,
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
