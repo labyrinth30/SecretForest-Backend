@@ -19,6 +19,9 @@ import {
 } from './common/const/env-keys.const';
 import { LogMiddleware } from './common/middleware/log-middleware';
 import { UsersModule } from './users/users.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessTokenGuard } from './auth/guard/bearer-token.guard';
+import { UsersModel } from './users/entity/users.entity';
 
 @Module({
   imports: [
@@ -35,13 +38,19 @@ import { UsersModule } from './users/users.module';
       username: process.env[ENV_DB_USERNAME_KEY],
       password: process.env[ENV_DB_PASSWORD_KEY],
       database: process.env[ENV_DB_DATABASE_KEY],
-      entities: [],
+      entities: [UsersModel],
       synchronize: true,
     }),
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
