@@ -8,7 +8,7 @@ export class UsersController {
 
   @Post()
   @ApiOperation({ summary: '유저 생성하기', description: '유저를 생성합니다.' })
-  postUser(@Body('nickname') body: CreateUserDto) {
+  postUser(@Body('name') body: CreateUserDto) {
     return this.usersService.createUser(body);
   }
   @Get()

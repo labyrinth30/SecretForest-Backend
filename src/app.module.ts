@@ -19,6 +19,7 @@ import {
 } from './common/const/env-keys.const';
 import { LogMiddleware } from './common/middleware/log-middleware';
 import { UsersModule } from './users/users.module';
+import { UsersModel } from './users/entity/users.entity';
 
 @Module({
   imports: [
@@ -29,13 +30,13 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: process.env[ENV_DB_HOST_KEY],
       port: parseInt(process.env[ENV_HOST_KEY]),
       username: process.env[ENV_DB_USERNAME_KEY],
       password: process.env[ENV_DB_PASSWORD_KEY],
       database: process.env[ENV_DB_DATABASE_KEY],
-      entities: [],
+      entities: [UsersModel],
       synchronize: true,
     }),
     UsersModule,

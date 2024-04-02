@@ -4,8 +4,8 @@ import { IsEmail, IsString, Length } from 'class-validator';
 import { lengthValidationMessage } from '../../common/validation-message/length-validation.message';
 import { stringValidationMessage } from '../../common/validation-message/string-validation.message';
 import { emailValidationMessgae } from '../../common/validation-message/email-validation-messgae';
-import { Exclude } from "class-transformer";
-import { RolesEnum } from "../../common/const/roles.const";
+import { Exclude } from 'class-transformer';
+import { RolesEnum } from '../../common/const/roles.const';
 
 @Entity()
 export class UsersModel extends BaseModel {
@@ -38,9 +38,8 @@ export class UsersModel extends BaseModel {
 
   @Column()
   @IsString({
-      message: stringValidationMessage,
-    }
-  )
+    message: stringValidationMessage,
+  })
   @Length(3, 20, {
     message: lengthValidationMessage,
   })
@@ -60,7 +59,8 @@ export class UsersModel extends BaseModel {
   password: string;
 
   @Column({
-    enum: Object.values(RolesEnum),
+    type: 'enum',
+    enum: RolesEnum,
     default: RolesEnum.USER,
   })
   role: RolesEnum;
