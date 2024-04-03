@@ -20,6 +20,10 @@ import {
 import { LogMiddleware } from './common/middleware/log-middleware';
 import { UsersModule } from './users/users.module';
 import { UsersModel } from './users/entity/users.entity';
+import { ThemesModule } from './themes/themes.module';
+import { ReservationsModule } from './reservations/reservations.module';
+import { ThemesModel } from "./themes/entity/themes.entity";
+import { ReservationsModel } from "./reservations/entity/reservations.entity";
 
 @Module({
   imports: [
@@ -36,10 +40,12 @@ import { UsersModel } from './users/entity/users.entity';
       username: process.env[ENV_DB_USERNAME_KEY],
       password: process.env[ENV_DB_PASSWORD_KEY],
       database: process.env[ENV_DB_DATABASE_KEY],
-      entities: [UsersModel],
+      entities: [UsersModel, ThemesModel, ReservationsModel],
       synchronize: true,
     }),
     UsersModule,
+    ThemesModule,
+    ReservationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
