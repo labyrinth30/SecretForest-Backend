@@ -43,8 +43,16 @@ export class UsersModel extends BaseModel {
   @Length(3, 20, {
     message: lengthValidationMessage,
   })
-  @Exclude({ toPlainOnly: true })
   password: string;
+
+  @Column({ default: '010-0000-0000' })
+  @IsString({
+    message: stringValidationMessage,
+  })
+  @Length(1, 20, {
+    message: lengthValidationMessage,
+  })
+  contact: string;
 
   @Column({
     type: 'enum',

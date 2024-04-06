@@ -1,10 +1,10 @@
-import { Body, Controller, Post, Headers, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Headers, UseGuards, Res, Req } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { BasicTokenGuard } from './guard/basic-token.guard';
 import { RefreshTokenGuard } from './guard/bearer-token.guard';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { IsPublic } from '../common/decorator/is-public.decorator';
-import { response } from "express";
+import { Request, Response } from "express";
 
 @Controller('auth')
 export class AuthController {
@@ -13,8 +13,8 @@ export class AuthController {
   @Post('token/access')
   @IsPublic()
   @UseGuards(RefreshTokenGuard)
-  postTokenAccess(@Headers('authorization') rawToken: string) {
-    const token = this.authService.extractTokenFromHeader(rawToken, true);
+  postTokenAccess(@Req() req: Request) {
+    const token = req.cookies['refreshToken'];
     const newToken = this.authService.rotateToken(token, false);
     /**
      * {accessToken: {token}}
@@ -27,8 +27,8 @@ export class AuthController {
   @Post('token/refresh')
   @IsPublic()
   @UseGuards(RefreshTokenGuard)
-  postTokenRefresh(@Headers('authorization') rawToken: string) {
-    const token = this.authService.extractTokenFromHeader(rawToken, true);
+  postTokenRefresh(@Req() req: Request) {
+    const token = req.cookies['refreshToken'];
     const newToken = this.authService.rotateToken(token, true);
     /**
      * {refreshToken: {token}}
@@ -42,19 +42,28 @@ export class AuthController {
   @Post('login/email')
   @IsPublic()
   @UseGuards(BasicTokenGuard)
-  postLoginEmail(@Headers('authorization') rawToken: string) {
+  postLoginEmail(
+    @Headers('authorization') rawToken: string,
+    @Res() res: Response,
+  ) {
     // email:password -> base64
     // fjaioejailfjkal:fnaskjfdfadfa -> email:password
     const token = this.authService.extractTokenFromHeader(rawToken, false);
 
     const credentials = this.authService.decodeBasicToken(token);
-    return this.authService.loginWithEmail(credentials, response);
+    return this.authService.loginWithEmail(credentials, res);
   }
 
   // 회원가입
   @Post('register/email')
   @IsPublic()
-  postRegisterEmail(@Body() body: RegisterUserDto) {
+  postRegisterEmail(@Body() body: RegisterUserDto, @Res() response: Response) {
     return this.authService.registerWithEmail(body, response);
+  }
+  // 로그아웃
+  @Post('logout')
+  @IsPublic()
+  postLogout(@Res() res: Response) {
+    return this.authService.logout(res);
   }
 }

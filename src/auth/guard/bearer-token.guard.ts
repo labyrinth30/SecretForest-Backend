@@ -85,16 +85,7 @@ export class RefreshTokenGuard extends BearerTokenGuard {
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh Token이 없습니다.');
     }
-
-    // 추출한 리프레쉬 토큰으로부터 사용자 정보와 토큰 타입을 확인
-    const result = await this.authService.verifyToken(refreshToken);
-
-    const user = await this.usersService.getUserByEmail(result.email);
-
-    // 요청 객체에 사용자 정보 및 토큰 관련 정보 저장
-    req.user = user;
-    req.token = refreshToken; // 쿠키에서 추출한 리프레쉬 토큰 사용
-    req.tokenType = 'refresh'; // 리프레쉬 토큰임을 명시
+    console.log(refreshToken);
 
     return true;
   }

@@ -141,20 +141,19 @@ export class AuthService {
     });
   }
 
-  loginUser(user: Pick<UsersModel, 'email' | 'id'>, response: Response) {
+  loginUser(
+    user: Pick<UsersModel, 'email' | 'id' | 'contact' | 'password'>,
+    response: Response,
+  ) {
     const accessToken = this.signToken(user, false);
     const refreshToken = this.signToken(user, true);
 
+    response.setHeader('Authorization', `Bearer ${accessToken}`);
     // refreshToken을 HTTP Only 쿠키로 설정
-    const cookieOptions = {
+    response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      // secure: true, // HTTPS를 사용하는 경우 주석 해제
-      path: '/',
-      // 쿠키 만료 시간 설정 (예: 7일 후)
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    };
-    response.cookie('refreshToken', refreshToken, cookieOptions);
-
+      maxAge: 1000 * 60 * 60, // 1시간
+    });
     // 사용자 정보와 accessToken 반환
     return response.json({
       id: user.id,
@@ -200,13 +199,6 @@ export class AuthService {
   }
 
   async registerWithEmail(user: RegisterUserDto, response: Response) {
-    /**
-     * 파라미터
-     *
-     * 1) 입력된 비밀번호
-     * 2) 해쉬 라운드 -> 10 라운드
-     * salt는 자동 생성
-     */
     const hash = await bcrypt.hash(
       user.password,
       parseInt(this.configService.get<string>(ENV_HASH_ROUNDS_KEY)),
@@ -217,5 +209,12 @@ export class AuthService {
     });
 
     return this.loginUser(newUser, response);
+  }
+
+  logout(response: Response) {
+    response.clearCookie('refreshToken');
+    return response.json({
+      message: '로그아웃 되었습니다.',
+    });
   }
 }

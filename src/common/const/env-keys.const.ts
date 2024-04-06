@@ -4,6 +4,8 @@ export const ENV_HOST_KEY = 'HOST';
 
 export const ENV_JWT_SECRET_KEY = 'JWT_SECRET';
 
+export const COOKIE_SECRET_KEY = 'COOKIE_SECRET';
+
 export const ENV_HASH_ROUNDS_KEY = 'HASH_ROUND';
 
 export const ENV_DB_HOST_KEY = 'DB_HOST';
