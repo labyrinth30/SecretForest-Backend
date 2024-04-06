@@ -1,12 +1,12 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseModel } from '../../common/entity/base.entity';
 import { IsNumber, IsString, Length } from 'class-validator';
 import { lengthValidationMessage } from '../../common/validation-message/length-validation.message';
 import { stringValidationMessage } from '../../common/validation-message/string-validation.message';
 import { numberValidationMessage } from '../../common/validation-message/number-validation-message';
-import { ReservationsModel } from "../../reservations/entity/reservations.entity";
+import { ReservationsModel } from '../../reservations/entity/reservations.entity';
 
-@Entity()
+@Entity('themes')
 export class ThemesModel extends BaseModel {
   @Column({
     length: 20,

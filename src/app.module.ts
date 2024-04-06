@@ -1,4 +1,6 @@
+/* eslint-disable prettier/prettier */
 import {
+  ClassSerializerInterceptor,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -22,8 +24,9 @@ import { UsersModule } from './users/users.module';
 import { UsersModel } from './users/entity/users.entity';
 import { ThemesModule } from './themes/themes.module';
 import { ReservationsModule } from './reservations/reservations.module';
-import { ThemesModel } from "./themes/entity/themes.entity";
-import { ReservationsModel } from "./reservations/entity/reservations.entity";
+import { ThemesModel } from './themes/entity/themes.entity';
+import { ReservationsModel } from './reservations/entity/reservations.entity';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -48,7 +51,10 @@ import { ReservationsModel } from "./reservations/entity/reservations.entity";
     ReservationsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, {
+    provide: APP_INTERCEPTOR,
+    useClass: ClassSerializerInterceptor,
+  }],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

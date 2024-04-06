@@ -3,7 +3,7 @@ import { UsersModel } from '../../users/entity/users.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { ThemesModel } from '../../themes/entity/themes.entity';
 
-@Entity()
+@Entity('reservations')
 export class ReservationsModel extends BaseModel {
   @ManyToOne(() => UsersModel, (user) => user.reservations)
   userId: UsersModel;

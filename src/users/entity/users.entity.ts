@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseModel } from '../../common/entity/base.entity';
 import { IsEmail, IsString, Length } from 'class-validator';
 import { lengthValidationMessage } from '../../common/validation-message/length-validation.message';
@@ -8,7 +8,7 @@ import { Exclude } from 'class-transformer';
 import { RolesEnum } from '../../common/const/roles.const';
 import { ReservationsModel } from '../../reservations/entity/reservations.entity';
 
-@Entity()
+@Entity('users')
 export class UsersModel extends BaseModel {
   @Column({
     length: 20,
@@ -52,7 +52,6 @@ export class UsersModel extends BaseModel {
     default: RolesEnum.USER,
   })
   role: RolesEnum;
-
   @OneToMany(() => ReservationsModel, (reservation) => reservation.userId)
   reservations: ReservationsModel[];
 }
