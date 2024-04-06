@@ -4,6 +4,7 @@ import { BasicTokenGuard } from './guard/basic-token.guard';
 import { RefreshTokenGuard } from './guard/bearer-token.guard';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { IsPublic } from '../common/decorator/is-public.decorator';
+import { response } from "express";
 
 @Controller('auth')
 export class AuthController {
@@ -47,16 +48,13 @@ export class AuthController {
     const token = this.authService.extractTokenFromHeader(rawToken, false);
 
     const credentials = this.authService.decodeBasicToken(token);
-    return this.authService.loginWithEmail(credentials);
+    return this.authService.loginWithEmail(credentials, response);
   }
 
   // 회원가입
   @Post('register/email')
   @IsPublic()
-  postRegisterEmail(
-    // 비밀번호가 8자 이하여야 할 때 유효성 검사를 하는 방법
-    @Body() body: RegisterUserDto,
-  ) {
-    return this.authService.registerWithEmail(body);
+  postRegisterEmail(@Body() body: RegisterUserDto) {
+    return this.authService.registerWithEmail(body, response);
   }
 }

@@ -9,6 +9,7 @@ import {
   ENV_HASH_ROUNDS_KEY,
   ENV_JWT_SECRET_KEY,
 } from '../common/const/env-keys.const';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -140,13 +141,26 @@ export class AuthService {
     });
   }
 
-  loginUser(user: Pick<UsersModel, 'email' | 'id'>) {
+  loginUser(user: Pick<UsersModel, 'email' | 'id'>, response: Response) {
     const accessToken = this.signToken(user, false);
     const refreshToken = this.signToken(user, true);
-    return {
-      accessToken,
-      refreshToken,
+
+    // refreshToken을 HTTP Only 쿠키로 설정
+    const cookieOptions = {
+      httpOnly: true,
+      // secure: true, // HTTPS를 사용하는 경우 주석 해제
+      path: '/',
+      // 쿠키 만료 시간 설정 (예: 7일 후)
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     };
+    response.cookie('refreshToken', refreshToken, cookieOptions);
+
+    // 사용자 정보와 accessToken 반환
+    return response.json({
+      id: user.id,
+      email: user.email,
+      accessToken,
+    });
   }
 
   async authenticateWithEmailAndPassword(
@@ -177,12 +191,15 @@ export class AuthService {
     return existingUser;
   }
 
-  async loginWithEmail(user: Pick<UsersModel, 'email' | 'password'>) {
+  async loginWithEmail(
+    user: Pick<UsersModel, 'email' | 'password'>,
+    response: Response,
+  ) {
     const existingUser = await this.authenticateWithEmailAndPassword(user);
-    return this.loginUser(existingUser);
+    return this.loginUser(existingUser, response);
   }
 
-  async registerWithEmail(user: RegisterUserDto) {
+  async registerWithEmail(user: RegisterUserDto, response: Response) {
     /**
      * 파라미터
      *
@@ -199,6 +216,6 @@ export class AuthService {
       password: hash,
     });
 
-    return this.loginUser(newUser);
+    return this.loginUser(newUser, response);
   }
 }
