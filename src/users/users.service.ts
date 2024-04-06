@@ -34,6 +34,7 @@ export class UsersService {
       email: dto.email,
       name: dto.name,
       password: dto.password,
+      contact: dto.contact,
     });
     const newUser = await this.usersRepository.save(userObject);
 

@@ -23,7 +23,7 @@ export class UsersModel extends BaseModel {
   name: string;
 
   @Column({
-    unique: false,
+    unique: true,
   })
   @IsString({
     message: stringValidationMessage,

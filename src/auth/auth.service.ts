@@ -137,7 +137,7 @@ export class AuthService {
     return this.jwtService.sign(payload, {
       secret: this.configService.get<string>(ENV_JWT_SECRET_KEY),
       // seconds
-      expiresIn: isRefreshToken ? 3600 : 300,
+      expiresIn: isRefreshToken ? 3600 : 60,
     });
   }
 
@@ -148,7 +148,6 @@ export class AuthService {
     const accessToken = this.signToken(user, false);
     const refreshToken = this.signToken(user, true);
 
-    response.setHeader('Authorization', `Bearer ${accessToken}`);
     // refreshToken을 HTTP Only 쿠키로 설정
     response.cookie('refreshToken', refreshToken, {
       httpOnly: true,

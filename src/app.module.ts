@@ -46,7 +46,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
       password: process.env[ENV_DB_PASSWORD_KEY],
       database: process.env[ENV_DB_DATABASE_KEY],
       entities: [UsersModel, ThemesModel, ReservationsModel],
-      synchronize: true,
+      synchronize: false,
     }),
     UsersModule,
     ThemesModule,
