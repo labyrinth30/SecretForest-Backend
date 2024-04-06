@@ -32,7 +32,7 @@ import { UsersModel } from './users/entity/users.entity';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: process.env[ENV_DB_HOST_KEY],
       port: parseInt(process.env[ENV_HOST_KEY]),
       username: process.env[ENV_DB_USERNAME_KEY],

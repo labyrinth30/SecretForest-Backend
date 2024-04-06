@@ -60,7 +60,8 @@ export class UsersModel extends BaseModel {
   password: string;
 
   @Column({
-    enum: Object.values(RolesEnum),
+    type: 'enum',
+    enum: RolesEnum,
     default: RolesEnum.USER,
   })
   role: RolesEnum;
