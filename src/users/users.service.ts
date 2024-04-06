@@ -39,4 +39,8 @@ export class UsersService {
 
     return newUser;
   }
+
+  async deleteAllUsers() {
+    return this.usersRepository.delete({});
+  }
 }
