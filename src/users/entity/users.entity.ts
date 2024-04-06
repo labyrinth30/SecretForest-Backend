@@ -1,4 +1,4 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseModel } from '../../common/entity/base.entity';
 import { IsEmail, IsString, Length } from 'class-validator';
 import { lengthValidationMessage } from '../../common/validation-message/length-validation.message';
@@ -6,8 +6,10 @@ import { stringValidationMessage } from '../../common/validation-message/string-
 import { emailValidationMessgae } from '../../common/validation-message/email-validation-messgae';
 import { Exclude } from "class-transformer";
 import { RolesEnum } from "../../common/const/roles.const";
+import { Exclude } from 'class-transformer';
+import { ReservationsModel } from '../../reservations/entity/reservations.entity';
 
-@Entity()
+@Entity('users')
 export class UsersModel extends BaseModel {
   @Column({
     length: 20,
@@ -30,32 +32,18 @@ export class UsersModel extends BaseModel {
   @IsEmail(
     {},
     {
-      message: emailValidationMessgae,
+      message: emailValidationMessage,
     },
   )
-  // 1. 유일무이한 값이 될 것
   email: string;
 
   @Column()
   @IsString({
-      message: stringValidationMessage,
-    }
-  )
+    message: stringValidationMessage,
+  })
   @Length(3, 20, {
     message: lengthValidationMessage,
   })
-  /**
-   * Request
-   * Frontend -> Backend
-   * plain object (JSON) -> class instance(dto)
-   *
-   * Response
-   * Backend -> Frontend
-   * class instance(dto) -> plain object (JSON)
-   *
-   * toClassOnly: class instance -> plain object -> 요청을 보낼 때만 적용
-   * toPlainOnly: plain object -> class instance -> 응답으로 보낼 때만 적용
-   */
   @Exclude({ toPlainOnly: true })
   password: string;
 
@@ -65,4 +53,6 @@ export class UsersModel extends BaseModel {
     default: RolesEnum.USER,
   })
   role: RolesEnum;
+  @OneToMany(() => ReservationsModel, (reservation) => reservation.userId)
+  reservations: ReservationsModel[];
 }

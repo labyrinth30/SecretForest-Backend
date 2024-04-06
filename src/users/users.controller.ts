@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiOperation } from '@nestjs/swagger';
 import { CreateUserDto } from './dto/create.user.dto';
@@ -8,7 +8,7 @@ export class UsersController {
 
   @Post()
   @ApiOperation({ summary: '유저 생성하기', description: '유저를 생성합니다.' })
-  postUser(@Body('nickname') body: CreateUserDto) {
+  postUser(@Body() body: CreateUserDto) {
     return this.usersService.createUser(body);
   }
   @Get()
@@ -18,5 +18,13 @@ export class UsersController {
   })
   getUsers() {
     return this.usersService.getAllUsers();
+  }
+  @Delete()
+  @ApiOperation({
+    summary: '유저 삭제',
+    description: '모든 유저를 삭제합니다.',
+  })
+  deleteUser() {
+    return this.usersService.deleteAllUsers();
   }
 }

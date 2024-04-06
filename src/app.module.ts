@@ -1,4 +1,6 @@
+/* eslint-disable prettier/prettier */
 import {
+  ClassSerializerInterceptor,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -22,6 +24,11 @@ import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './auth/guard/bearer-token.guard';
 import { UsersModel } from './users/entity/users.entity';
+import { ThemesModule } from './themes/themes.module';
+import { ReservationsModule } from './reservations/reservations.module';
+import { ThemesModel } from './themes/entity/themes.entity';
+import { ReservationsModel } from './reservations/entity/reservations.entity';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -38,19 +45,24 @@ import { UsersModel } from './users/entity/users.entity';
       username: process.env[ENV_DB_USERNAME_KEY],
       password: process.env[ENV_DB_PASSWORD_KEY],
       database: process.env[ENV_DB_DATABASE_KEY],
-      entities: [UsersModel],
+      entities: [UsersModel, ThemesModel, ReservationsModel],
       synchronize: true,
     }),
     UsersModule,
+    ThemesModule,
+    ReservationsModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    {
+  providers: [AppService, 
+     {
+    provide: APP_INTERCEPTOR,
+    useClass: ClassSerializerInterceptor,
+  },
+     {
       provide: APP_GUARD,
       useClass: AccessTokenGuard,
-    },
-  ],
+  },
+   ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
