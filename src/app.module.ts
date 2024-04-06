@@ -21,6 +21,8 @@ import {
 } from './common/const/env-keys.const';
 import { LogMiddleware } from './common/middleware/log-middleware';
 import { UsersModule } from './users/users.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AccessTokenGuard } from './auth/guard/bearer-token.guard';
 import { UsersModel } from './users/entity/users.entity';
 import { ThemesModule } from './themes/themes.module';
 import { ReservationsModule } from './reservations/reservations.module';
@@ -51,10 +53,16 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     ReservationsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, {
+  providers: [AppService, 
+     {
     provide: APP_INTERCEPTOR,
     useClass: ClassSerializerInterceptor,
-  }],
+  },
+     {
+      provide: APP_GUARD,
+      useClass: AccessTokenGuard,
+  },
+   ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

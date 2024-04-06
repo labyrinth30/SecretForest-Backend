@@ -19,7 +19,6 @@ export class UsersController {
   getUsers() {
     return this.usersService.getAllUsers();
   }
-
   @Delete()
   @ApiOperation({
     summary: '유저 삭제',
