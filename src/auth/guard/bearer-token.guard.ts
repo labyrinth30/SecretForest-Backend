@@ -85,8 +85,6 @@ export class RefreshTokenGuard extends BearerTokenGuard {
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh Token이 없습니다.');
     }
-    console.log(refreshToken);
-
     return true;
   }
 }

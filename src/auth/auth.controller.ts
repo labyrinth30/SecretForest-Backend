@@ -4,7 +4,7 @@ import { BasicTokenGuard } from './guard/basic-token.guard';
 import { RefreshTokenGuard } from './guard/bearer-token.guard';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { IsPublic } from '../common/decorator/is-public.decorator';
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -30,9 +30,6 @@ export class AuthController {
   postTokenRefresh(@Req() req: Request) {
     const token = req.cookies['refreshToken'];
     const newToken = this.authService.rotateToken(token, true);
-    /**
-     * {refreshToken: {token}}
-     */
     return {
       refreshToken: newToken,
     };
@@ -46,10 +43,7 @@ export class AuthController {
     @Headers('authorization') rawToken: string,
     @Res() res: Response,
   ) {
-    // email:password -> base64
-    // fjaioejailfjkal:fnaskjfdfadfa -> email:password
     const token = this.authService.extractTokenFromHeader(rawToken, false);
-
     const credentials = this.authService.decodeBasicToken(token);
     return this.authService.loginWithEmail(credentials, res);
   }
