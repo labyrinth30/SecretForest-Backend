@@ -1,10 +1,20 @@
-import { Body, Controller, Post, Headers, UseGuards, Res, Req } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Post,
+  Headers,
+  UseGuards,
+  Res,
+  Req,
+  Get,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { BasicTokenGuard } from './guard/basic-token.guard';
 import { RefreshTokenGuard } from './guard/bearer-token.guard';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { IsPublic } from '../common/decorator/is-public.decorator';
 import { Request, Response } from 'express';
+import { GoogleAuthGuard } from './guard/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -59,5 +69,19 @@ export class AuthController {
   @IsPublic()
   postLogout(@Res() res: Response) {
     return this.authService.logout(res);
+  }
+
+  // 구글 로그인
+  @Get('to-google')
+  @IsPublic()
+  @UseGuards(GoogleAuthGuard)
+  async googleAuth(@Req() req: Request) {}
+
+  @Get('google')
+  @IsPublic()
+  @UseGuards(GoogleAuthGuard)
+  async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    const { user } = req;
+    return res.send(user);
   }
 }

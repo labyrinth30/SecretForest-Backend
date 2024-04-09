@@ -11,6 +11,13 @@ import { emailValidationMessage } from '../../common/validation-message/email-va
 @Entity('users')
 export class UsersModel extends BaseModel {
   @Column({
+    nullable: true,
+  })
+  @IsString({
+    message: stringValidationMessage,
+  })
+  providerId: string;
+  @Column({
     length: 20,
     unique: false,
   })
@@ -36,7 +43,9 @@ export class UsersModel extends BaseModel {
   )
   email: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @IsString({
     message: stringValidationMessage,
   })
