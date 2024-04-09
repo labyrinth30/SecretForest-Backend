@@ -34,7 +34,6 @@ export class UsersService {
       email: dto.email,
       name: dto.name,
       password: dto.password,
-      contact: dto.contact,
     });
     const newUser = await this.usersRepository.save(userObject);
 
@@ -42,5 +41,26 @@ export class UsersService {
   }
   async deleteAllUsers() {
     return this.usersRepository.delete({});
+  }
+  async findByEmailOrSave(
+    email: string,
+    name: string,
+    providerId: string,
+  ): Promise<UsersModel> {
+    const foundUser = await this.usersRepository.findOne({
+      where: {
+        email,
+      },
+    });
+    if (foundUser) {
+      return foundUser;
+    }
+    const newUser = this.usersRepository.create({
+      email,
+      name,
+      providerId,
+    });
+    await this.usersRepository.save(newUser);
+    return newUser;
   }
 }

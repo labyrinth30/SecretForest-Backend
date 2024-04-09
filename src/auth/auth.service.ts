@@ -81,7 +81,7 @@ export class AuthService {
   }
 
   loginUser(
-    user: Pick<UsersModel, 'email' | 'id' | 'contact' | 'password'>,
+    user: Pick<UsersModel, 'email' | 'id' | 'password'>,
     response: Response,
   ) {
     const accessToken = this.signToken(user, false);
@@ -153,5 +153,8 @@ export class AuthService {
     return response.json({
       message: '로그아웃 되었습니다.',
     });
+  }
+  async googleLogin(user: UsersModel, res: Response) {
+    return this.loginUser(user, res);
   }
 }

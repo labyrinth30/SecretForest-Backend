@@ -5,5 +5,4 @@ export class CreateUserDto extends PickType(UsersModel, [
   'email',
   'name',
   'password',
-  'contact',
 ]) {}

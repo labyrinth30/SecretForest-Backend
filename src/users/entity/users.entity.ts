@@ -54,15 +54,6 @@ export class UsersModel extends BaseModel {
   })
   password: string;
 
-  @Column({ default: '010-0000-0000' })
-  @IsString({
-    message: stringValidationMessage,
-  })
-  @Length(1, 20, {
-    message: lengthValidationMessage,
-  })
-  contact: string;
-
   @Column({
     type: 'enum',
     enum: RolesEnum,
