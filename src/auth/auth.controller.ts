@@ -15,7 +15,7 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { IsPublic } from '../common/decorator/is-public.decorator';
 import { Request, Response } from 'express';
 import { GoogleAuthGuard } from './guard/google-auth.guard';
-import { UsersModel } from "../users/entity/users.entity";
+import { UsersModel } from '../users/entity/users.entity';
 
 @Controller('auth')
 export class AuthController {

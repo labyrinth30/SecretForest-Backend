@@ -91,12 +91,11 @@ export class AuthService {
       httpOnly: true,
       maxAge: 1000 * 60 * 60, // 1시간
     });
-    // 사용자 정보와 accessToken 반환
-    return response.json({
-      id: user.id,
-      email: user.email,
-      accessToken,
+    response.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60, // 1분
     });
+    return response.redirect(`http://localhost:5173`);
   }
 
   async authenticateWithEmailAndPassword(
