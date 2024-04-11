@@ -63,4 +63,26 @@ export class UsersService {
     await this.usersRepository.save(newUser);
     return newUser;
   }
+  async findByEmail(email: string) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        email,
+      },
+    });
+    return {
+      id: user.id,
+      email: user.email,
+    };
+  }
+  async checkExistUserByEmail(email: string) {
+    if (!email) {
+      throw new BadRequestException('이메일을 입력해주세요.');
+    }
+    const isExist = await this.usersRepository.exists({
+      where: {
+        email,
+      },
+    });
+    return isExist;
+  }
 }
