@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { ConfigService } from '@nestjs/config';
 import {
+  ENV_FRONTEND_URL_KEY,
   ENV_HASH_ROUNDS_KEY,
   ENV_JWT_SECRET_KEY,
 } from '../common/const/env-keys.const';
@@ -76,13 +77,14 @@ export class AuthService {
     };
     return this.jwtService.sign(payload, {
       secret: this.configService.get<string>(ENV_JWT_SECRET_KEY),
-      expiresIn: isRefreshToken ? 3600 : 60,
+      expiresIn: isRefreshToken ? 3600 : 300, // 1시간, 5분
     });
   }
 
   loginUser(
     user: Pick<UsersModel, 'email' | 'id' | 'password'>,
     response: Response,
+    isSocial: boolean = false,
   ) {
     const accessToken = this.signToken(user, false);
     const refreshToken = this.signToken(user, true);
@@ -91,29 +93,24 @@ export class AuthService {
       httpOnly: true,
       maxAge: 1000 * 60 * 60, // 1시간
     });
-    response.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      maxAge: 1000 * 60, // 1분
+    if (isSocial) {
+      return response.redirect(`${process.env[ENV_FRONTEND_URL_KEY]}`);
+    }
+    return response.json({
+      id: user.id,
+      email: user.email,
+      accessToken,
     });
-    return response.redirect(`http://localhost:5173`);
   }
 
   async authenticateWithEmailAndPassword(
     user: Pick<UsersModel, 'email' | 'password'>,
   ) {
-    // 1) email이 존재하는지
     const existingUser = await this.usersService.getUserByEmail(user.email);
 
     if (!existingUser) {
       throw new UnauthorizedException('존재하지 않는 사용자입니다.');
     }
-    // 2) password가 일치하는지
-    /**
-     * 파라미터
-     *
-     * 1. 입력된 비밀번호
-     * 2. 기존 해시(hash) -> 사용자 정보에 저장되어있는 hash
-     */
     const passOk: boolean = await bcrypt.compare(
       user.password,
       existingUser.password,
@@ -153,7 +150,11 @@ export class AuthService {
       message: '로그아웃 되었습니다.',
     });
   }
-  async googleLogin(user: UsersModel, res: Response) {
-    return this.loginUser(user, res);
+  googleLogin(user: UsersModel, res: Response) {
+    return this.loginUser(user, res, true);
+  }
+  async parseAccessToken(token: string) {
+    const decoded = this.verifyToken(token);
+    return this.usersService.findByEmail(decoded.email);
   }
 }

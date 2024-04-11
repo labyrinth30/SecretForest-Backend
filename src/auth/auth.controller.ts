@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { BasicTokenGuard } from './guard/basic-token.guard';
-import { RefreshTokenGuard } from './guard/bearer-token.guard';
+import { AccessTokenGuard, RefreshTokenGuard } from "./guard/bearer-token.guard";
 import { RegisterUserDto } from './dto/register-user.dto';
 import { IsPublic } from '../common/decorator/is-public.decorator';
 import { Request, Response } from 'express';
@@ -27,9 +27,6 @@ export class AuthController {
   postTokenAccess(@Req() req: Request) {
     const token = req.cookies['refreshToken'];
     const newToken = this.authService.rotateToken(token, false);
-    /**
-     * {accessToken: {token}}
-     */
     return {
       accessToken: newToken,
     };
@@ -81,8 +78,19 @@ export class AuthController {
   @Get('google')
   @IsPublic()
   @UseGuards(GoogleAuthGuard)
-  async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+  googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
     const user = req.user as UsersModel;
     return this.authService.googleLogin(user, res);
   }
+  @Get('me')
+  @UseGuards(AccessTokenGuard)
+  getMyInfo(
+    @Headers('authorization') rawToken: string,
+  )
+  {
+    const token = this.authService.extractTokenFromHeader(rawToken, true);
+    const user = this.authService.parseAccessToken(token);
+    return user;
+  }
+
 }
