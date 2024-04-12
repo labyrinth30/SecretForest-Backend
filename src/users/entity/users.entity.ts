@@ -4,9 +4,8 @@ import { IsEmail, IsString, Length } from 'class-validator';
 import { lengthValidationMessage } from '../../common/validation-message/length-validation.message';
 import { stringValidationMessage } from '../../common/validation-message/string-validation.message';
 import { RolesEnum } from '../../common/const/roles.const';
-import { Exclude } from 'class-transformer';
 import { ReservationsModel } from '../../reservations/entity/reservations.entity';
-import { emailValidationMessage } from '../../common/validation-message/email-validation-messgae';
+import { emailValidationMessage } from '../../common/validation-message/email-validation-message';
 
 @Entity('users')
 export class UsersModel extends BaseModel {
