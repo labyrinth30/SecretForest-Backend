@@ -7,6 +7,7 @@ import { RolesEnum } from '../../common/const/roles.const';
 import { ReservationsModel } from '../../reservations/entity/reservations.entity';
 import { emailValidationMessage } from '../../common/validation-message/email-validation-message';
 
+
 @Entity('users')
 export class UsersModel extends BaseModel {
   @Column({
