@@ -84,7 +84,7 @@ export class AuthService {
   loginUser(
     user: Pick<UsersModel, 'email' | 'id' | 'password'>,
     response: Response,
-    isSocial: boolean = false,
+    isSocialLogin: boolean = false,
   ) {
     const accessToken = this.signToken(user, false);
     const refreshToken = this.signToken(user, true);
@@ -93,7 +93,7 @@ export class AuthService {
       httpOnly: true,
       maxAge: 1000 * 60 * 60, // 1시간
     });
-    if (isSocial) {
+    if (isSocialLogin) {
       return response.redirect(`${process.env[ENV_FRONTEND_URL_KEY]}`);
     }
     return response.json({

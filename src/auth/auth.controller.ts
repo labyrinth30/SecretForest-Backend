@@ -73,7 +73,7 @@ export class AuthController {
   @Get('to-google')
   @IsPublic()
   @UseGuards(GoogleAuthGuard)
-  async googleAuth(@Req() req: Request) {}
+  async googleAuth() {}
 
   @Get('google')
   @IsPublic()
