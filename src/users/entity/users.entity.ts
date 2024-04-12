@@ -4,12 +4,19 @@ import { IsEmail, IsString, Length } from 'class-validator';
 import { lengthValidationMessage } from '../../common/validation-message/length-validation.message';
 import { stringValidationMessage } from '../../common/validation-message/string-validation.message';
 import { RolesEnum } from '../../common/const/roles.const';
-import { Exclude } from 'class-transformer';
 import { ReservationsModel } from '../../reservations/entity/reservations.entity';
-import { emailValidationMessage } from "../../common/validation-message/email-validation-messgae";
+import { emailValidationMessage } from '../../common/validation-message/email-validation-message';
+
 
 @Entity('users')
 export class UsersModel extends BaseModel {
+  @Column({
+    nullable: true,
+  })
+  @IsString({
+    message: stringValidationMessage,
+  })
+  providerId: string;
   @Column({
     length: 20,
     unique: false,
@@ -36,14 +43,15 @@ export class UsersModel extends BaseModel {
   )
   email: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @IsString({
     message: stringValidationMessage,
   })
   @Length(3, 20, {
     message: lengthValidationMessage,
   })
-  @Exclude({ toPlainOnly: true })
   password: string;
 
   @Column({
