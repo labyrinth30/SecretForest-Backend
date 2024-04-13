@@ -14,7 +14,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     try {
       return await this.userService.verifyUser(email, password);
     } catch (error) {
-      return new UnauthorizedException(
+      throw new UnauthorizedException(
         '이메일 또는 비밀번호가 일치하지 않습니다.',
       );
     }

@@ -17,8 +17,11 @@ export class UsersService {
       email,
     });
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!user) {
+      throw new UnauthorizedException('사용자를 찾을 수 없습니다.');
+    }
     if (!isPasswordValid) {
-      return new UnauthorizedException('비밀번호가 일치하지 않습니다.');
+      throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
     return user;
   }
