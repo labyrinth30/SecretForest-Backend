@@ -2,6 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcryptjs';
+import { GetUserDto } from './dto/get-user.dto';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class UsersService {
@@ -24,5 +26,12 @@ export class UsersService {
       throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
     return user;
+  }
+
+  async getUser(getUserDto: GetUserDto) {
+    const userId = new Types.ObjectId(getUserDto._id);
+    return this.usersRepository.findOne({
+      _id: userId,
+    });
   }
 }
