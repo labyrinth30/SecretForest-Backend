@@ -26,4 +26,9 @@ export class AuthController {
   async authenticate(@Payload() data: any) {
     return data.user;
   }
+
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) response: Response) {
+    await this.authService.logout(response);
+  }
 }

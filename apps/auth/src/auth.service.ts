@@ -28,4 +28,9 @@ export class AuthService {
       expires,
     });
   }
+
+  async logout(response: Response) {
+    response.clearCookie('Authentication');
+    return response.json({ message: '로그아웃 되었습니다.' });
+  }
 }
