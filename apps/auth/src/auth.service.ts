@@ -49,9 +49,11 @@ export class AuthService {
     const newUser = await this.usersService.create(user);
     return this.login(newUser, response);
   }
-
   async logout(response: Response) {
     response.clearCookie('refreshToken');
     return response.json({ message: '로그아웃 되었습니다.' });
+  }
+  googleLogin(user: UserDocument, res: Response) {
+    return this.login(user, res);
   }
 }

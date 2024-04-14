@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CurrentUser } from '@app/common';
@@ -7,6 +7,7 @@ import { Response } from 'express';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CreateUserDto } from './users/dto/create-user.dto';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -49,5 +50,14 @@ export class AuthController {
   @Post('register/email')
   async registerEmail(@Body() body: CreateUserDto, @Res() res: Response) {
     await this.authService.registerWithEmail(body, res);
+  }
+  @Get('to-google')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuth() {}
+  @Get('google')
+  @UseGuards(GoogleAuthGuard)
+  googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    const user = req as unknown as UserDocument;
+    return this.authService.googleLogin(user, res);
   }
 }
