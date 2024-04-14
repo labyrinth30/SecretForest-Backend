@@ -1,15 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserDocument } from './users/models/user.schema';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from './interfaces/token-payload.interface';
+import { UsersService } from './users/users.service';
+import { CreateUserDto } from './users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    private readonly usersService: UsersService,
   ) {}
   async login(user: UserDocument, response: Response) {
     const accessToken = this.signToken(user, false);
@@ -24,7 +27,7 @@ export class AuthService {
       accessToken,
     });
   }
-  signToken(user: Pick<UserDocument, '_id'>, isRefreshToken: boolean) {
+  signToken(user: UserDocument, isRefreshToken: boolean): string {
     const tokenPayload: TokenPayload = {
       userId: user._id.toHexString(),
       type: isRefreshToken ? 'refresh' : 'access',
@@ -34,28 +37,17 @@ export class AuthService {
       expiresIn: isRefreshToken ? 3600 : 300,
     });
   }
-  verifyToken(token: string) {
-    try {
-      return this.jwtService.verify(token, {
-        secret: this.configService.get<string>('JWT_SECRET'),
-      });
-    } catch (e) {
-      throw new UnauthorizedException('토큰이 만료되었거나 잘못된 토큰입니다.');
-    }
-  }
-  rotateToken(token: string, isRefreshToken: boolean) {
-    const decoded = this.verifyToken(token);
-    if (decoded.type !== 'refresh') {
-      throw new UnauthorizedException(
-        '토큰 재발급은 Refresh 토큰으로만 가능합니다.',
-      );
-    }
+  rotateToken(user: UserDocument, isRefreshToken: boolean): string {
     return this.signToken(
       {
-        ...decoded,
+        ...user,
       },
       isRefreshToken,
     );
+  }
+  async registerWithEmail(user: CreateUserDto, response: Response) {
+    const newUser = await this.usersService.create(user);
+    return this.login(newUser, response);
   }
 
   async logout(response: Response) {

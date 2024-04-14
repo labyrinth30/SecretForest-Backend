@@ -1,4 +1,4 @@
-import { Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CurrentUser } from '@app/common';
@@ -6,7 +6,7 @@ import { UserDocument } from './users/models/user.schema';
 import { Response } from 'express';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { Request } from 'express';
+import { CreateUserDto } from './users/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -18,7 +18,7 @@ export class AuthController {
     return data.user;
   }
   @UseGuards(LocalAuthGuard)
-  @Post('login')
+  @Post('login/email')
   async login(
     @CurrentUser() user: UserDocument,
     @Res({ passthrough: true }) response: Response,
@@ -32,21 +32,22 @@ export class AuthController {
   }
   @Post('token/access')
   @UseGuards(JwtAuthGuard)
-  tokenAccess(@Req() req: Request) {
-    const token = req.cookies['refreshToken'];
-    const newToken = this.authService.rotateToken(token, false);
-    return {
-      accessToken: newToken,
-    };
+  tokenAccess(@CurrentUser() user: UserDocument) {
+    const newToken = this.authService.rotateToken(user, false);
+    return { accessToken: newToken };
   }
   @Post('token/refresh')
   @UseGuards(JwtAuthGuard)
-  tokenRefresh(@Req() req: Request, @Res() res: Response) {
-    const token = req.cookies['refreshToken'];
-    const newToken = this.authService.rotateToken(token, true);
+  tokenRefresh(@CurrentUser() user: UserDocument, @Res() res: Response) {
+    const newToken = this.authService.rotateToken(user, true);
     res.cookie('refreshToken', newToken, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60,
     });
+    return res.send(true);
+  }
+  @Post('register/email')
+  async registerEmail(@Body() body: CreateUserDto, @Res() res: Response) {
+    await this.authService.registerWithEmail(body, res);
   }
 }
