@@ -38,6 +38,7 @@ lerna-debug.log*
 # dotenv environment variable files
 apps/reservations/.env
 apps/auth/.env
+apps/notifications/.env
 .env.development.local
 .env.test.local
 .env.production.local
