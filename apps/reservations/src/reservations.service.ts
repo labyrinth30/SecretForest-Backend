@@ -1,19 +1,31 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ReservationsRepository } from './reservations.repository';
 import { Types } from 'mongoose';
+import { NOTIFICATIONS_SERVICE, UserDto } from '@app/common';
+import { ClientProxy } from '@nestjs/microservices';
 @Injectable()
 export class ReservationsService {
   constructor(
     private readonly reservationsRepository: ReservationsRepository,
+    @Inject(NOTIFICATIONS_SERVICE)
+    private readonly notificationService: ClientProxy,
   ) {}
-  create(createReservationDto: CreateReservationDto, userId: string) {
-    return this.reservationsRepository.create({
+  async create(
+    createReservationDto: CreateReservationDto,
+    { email, _id: userId }: UserDto,
+  ) {
+    const newReservations = await this.reservationsRepository.create({
       ...createReservationDto,
       timestamp: new Date(),
       userId,
     });
+    this.notificationService.emit('notify_email', {
+      email,
+      text: 'Reservation created',
+    });
+    return newReservations;
   }
 
   findAll() {
