@@ -1,4 +1,4 @@
-FROM node:alpine As  development
+FROM node:alpine AS  development
 
 WORKDIR /usr/src/app
 
@@ -7,6 +7,8 @@ COPY yarn.lock ./
 COPY tsconfig.json tsconfig.json
 COPY nest-cli.json nest-cli.json
 
+RUN yarn install
+
 COPY apps/auth apps/auth
 COPY libs libs
 
@@ -14,7 +16,7 @@ RUN yarn install -r
 
 RUN yarn build auth
 
-FROM node:alpine As production
+FROM node:alpine AS production
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
