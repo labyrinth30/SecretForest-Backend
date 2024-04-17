@@ -4,12 +4,14 @@ WORKDIR /usr/src/app
 
 COPY ../../package.json ./
 COPY ../../yarn.lock ./
+COPY tsconfig.json tsconfig.json
 
 RUN yarn install
 
-COPY ../.. .
+COPY apps/reservations apps/reservations
+COPY libs libs
 
-RUN yarn build
+RUN yarn build reservations
 
 FROM node:alpine As production
 

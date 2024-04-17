@@ -11,11 +11,9 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AUTH_SERVICE } from '@app/common/const/services';
-import { NotificationsModule } from '../../notifications/src/notifications.module';
 
 @Module({
   imports: [
-    NotificationsModule,
     DatabaseModule,
     DatabaseModule.forFeature([
       { name: ReservationDocument.name, schema: ReservationSchema },
