@@ -2,8 +2,8 @@ FROM node:alpine As  development
 
 WORKDIR /usr/src/app
 
-COPY ../../package.json ./
-COPY ../../yarn.lock ./
+COPY package.json ./
+COPY yarn.lock ./
 COPY tsconfig.json tsconfig.json
 COPY nest-cli.json nest-cli.json
 
@@ -21,8 +21,8 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /usr/src/app
 
-COPY ../../package.json ./
-COPY ../../yarn.lock ./
+COPY package.json ./
+COPY yarn.lock ./
 
 RUN yarn install --production
 
