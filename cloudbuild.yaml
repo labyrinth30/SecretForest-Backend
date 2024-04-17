@@ -7,7 +7,7 @@ steps:
       'asia-northeast3-docker.pkg.dev/secret-forest-oauth/reservations/production',
       '-f',
       'apps/reservations/Dockerfile',
-      '.'
+      'apps/reservations',
     ]
   - name: 'gcr.io/cloud-builders/docker'
     args: [
@@ -21,7 +21,7 @@ steps:
       'asia-northeast3-docker.pkg.dev/secret-forest-oauth/auth/production',
       '-f',
       'apps/auth/Dockerfile',
-      '.'
+      'apps/auth'
     ]
   - name: 'gcr.io/cloud-builders/docker'
     args: [
@@ -35,7 +35,7 @@ steps:
       'asia-northeast3-docker.pkg.dev/secret-forest-oauth/notifications/production',
       '-f',
       'apps/notifications/Dockerfile',
-      '.'
+      'apps/notifications'
     ]
   - name: 'gcr.io/cloud-builders/docker'
     args: [
