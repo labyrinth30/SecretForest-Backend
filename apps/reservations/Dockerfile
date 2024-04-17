@@ -12,8 +12,6 @@ RUN yarn install
 COPY apps/reservations apps/reservations
 COPY libs libs
 
-RUN yarn install -r
-
 RUN yarn build reservations
 
 FROM node:alpine AS production

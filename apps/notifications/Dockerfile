@@ -12,7 +12,7 @@ RUN yarn install
 COPY apps/notifications apps/notifications
 COPY libs libs
 
-RUN yarn install -r
+RUN cd apps/notifications && yarn install
 
 RUN yarn build notifications
 

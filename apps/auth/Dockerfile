@@ -12,7 +12,7 @@ RUN yarn install
 COPY apps/auth apps/auth
 COPY libs libs
 
-RUN yarn install -r
+RUN cd apps/auth && yarn install
 
 RUN yarn build auth
 
