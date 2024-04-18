@@ -17,3 +17,9 @@ spec:
       containers:
       - image: asia-northeast3-docker.pkg.dev/secret-forest-oauth/auth/production
         name: auth
+        env:
+          - name: MONGODB_URI
+            valueFrom:
+              secretKeyRef:
+                name: mongodb
+                key: connectionString
