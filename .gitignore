@@ -46,7 +46,7 @@ apps/notifications/.env
 .env.test.local
 .env.production.local
 .env.local
-
+.env
 # temp directory
 .temp
 .tmp
