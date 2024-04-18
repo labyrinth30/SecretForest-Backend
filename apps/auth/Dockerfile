@@ -28,6 +28,7 @@ COPY yarn.lock ./
 
 RUN yarn install --production
 
+COPY --from=development /usr/src/app/apps/auth/node_modules ./apps/auth/node_modules
 COPY --from=development /usr/src/app/dist ./dist
 
 CMD ["node", "dist/apps/auth/main"]
