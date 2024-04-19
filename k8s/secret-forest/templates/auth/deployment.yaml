@@ -29,9 +29,9 @@ spec:
                 name: jwt
                 key: jwtSecret
           - name: TCP_PORT
-            value: "3002"
+            value: '3002'
           - name: HTTP_PORT
-            value: "3003"
+            value: '3003'
           - name: GOOGLE_CLIENT_ID
             value: 978767535383-equ6kdpkkfio1sv4tu03dovo6mipf77o.apps.googleusercontent.com
           - name: GOOGLE_CLIENT_SECRET

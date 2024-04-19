@@ -6,7 +6,7 @@ metadata:
   name: auth-tcp
 spec:
   ports:
-  - name: "tcp"
+  - name: 'tcp'
     port: 3002
     protocol: TCP
     targetPort: 3002
