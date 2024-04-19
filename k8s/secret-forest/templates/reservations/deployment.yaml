@@ -29,5 +29,9 @@ spec:
             value: auth-tcp
           - name: AUTH_PORT
             value: '3002'
+          - name: NOTIFICATIONS_HOST
+            value: notifications
+          - name: NOTIFICATIONS_PORT
+            value: '3000'
         ports:
           - containerPort: 3004
