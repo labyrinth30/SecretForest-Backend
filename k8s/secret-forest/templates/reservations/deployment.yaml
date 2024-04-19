@@ -29,3 +29,5 @@ spec:
             value: auth-tcp
           - name: AUTH_PORT
             value: '3002'
+        ports:
+          - containerPort: 3004
