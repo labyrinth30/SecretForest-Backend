@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
-import { DatabaseModule, LoggerModule, NOTIFICATIONS_SERVICE } from '@app/common';
+import {
+  DatabaseModule, HealthModule,
+  LoggerModule,
+  NOTIFICATIONS_SERVICE,
+} from '@app/common';
 import { ReservationsRepository } from './reservations.repository';
 import * as Joi from 'joi';
 import {
@@ -14,6 +18,7 @@ import { AUTH_SERVICE } from '@app/common/const/services';
 
 @Module({
   imports: [
+    HealthModule,
     DatabaseModule,
     DatabaseModule.forFeature([
       { name: ReservationDocument.name, schema: ReservationSchema },
