@@ -9,7 +9,6 @@ import * as Joi from 'joi';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
-import { HealthController } from './health.controller';
 
 @Module({
   imports: [
@@ -33,7 +32,7 @@ import { HealthController } from './health.controller';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController, HealthController],
+  controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy],
 })
 export class AuthModule {}

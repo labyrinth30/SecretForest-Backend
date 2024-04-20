@@ -12,6 +12,11 @@ import { GoogleAuthGuard } from './guards/google-auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Get()
+  health() {
+    return true;
+  }
+
   @UseGuards(JwtAuthGuard)
   @MessagePattern('authenticate')
   async authenticate(@Payload() data: any) {
