@@ -49,13 +49,13 @@ spec:
           - containerPort: 3003
         livenessProbe:
           httpGet:
-            path: /health
+            path: /livez/
             port: 3003
           initialDelaySeconds: 5
           periodSeconds: 5
         readinessProbe:
             httpGet:
-                path: /ready
+                path: /readyz/
                 port: 3003
             initialDelaySeconds: 5
             periodSeconds: 5

@@ -37,13 +37,13 @@ spec:
           - containerPort: 3004
         livenessProbe:
             httpGet:
-                path: /health
+                path: /livez/
                 port: 3004
             initialDelaySeconds: 5
             periodSeconds: 5
         readinessProbe:
             httpGet:
-                path: /health
+                path: /readyz/
                 port: 3004
             initialDelaySeconds: 5
             periodSeconds: 5

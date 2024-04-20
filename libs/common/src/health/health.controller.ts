@@ -6,4 +6,12 @@ export class HealthController {
   health() {
     return true;
   }
+  @Get('/livez')
+  livez() {
+    return true;
+  }
+  @Get('/readyz')
+  readyz() {
+    return true;
+  }
 }
