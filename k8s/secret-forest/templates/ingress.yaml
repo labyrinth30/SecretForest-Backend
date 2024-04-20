@@ -14,7 +14,7 @@ spec:
                 port:
                   number: 3004
           - path: /auth/*
-            pathType: implementationSpecific
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: auth-http
