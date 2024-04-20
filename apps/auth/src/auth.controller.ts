@@ -12,8 +12,12 @@ import { GoogleAuthGuard } from './guards/google-auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get()
-  health() {
+  @Get('health')
+  healthCheck() {
+    return true;
+  }
+  @Get('ready')
+  readinessCheck() {
     return true;
   }
 

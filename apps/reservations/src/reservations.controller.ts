@@ -17,8 +17,12 @@ import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
 export class ReservationsController {
   constructor(private readonly reservationsService: ReservationsService) {}
 
-  @Get()
-  health() {
+  @Get('health')
+  healthCheck() {
+    return true;
+  }
+  @Get('ready')
+  readinessCheck() {
     return true;
   }
 
