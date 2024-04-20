@@ -15,6 +15,7 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AUTH_SERVICE } from '@app/common/const/services';
+import { HealthController } from './health.controller';
 
 @Module({
   imports: [
@@ -59,7 +60,7 @@ import { AUTH_SERVICE } from '@app/common/const/services';
       },
     ]),
   ],
-  controllers: [ReservationsController],
+  controllers: [ReservationsController, HealthController],
   providers: [ReservationsService, ReservationsRepository],
 })
 export class ReservationsModule {}
