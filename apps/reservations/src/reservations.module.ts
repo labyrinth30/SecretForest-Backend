@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
 import {
-  DatabaseModule, HealthModule,
+  DatabaseModule,
+  HealthModule,
   LoggerModule,
   NOTIFICATIONS_SERVICE,
 } from '@app/common';
@@ -15,7 +16,6 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AUTH_SERVICE } from '@app/common/const/services';
-import { HealthController } from './health.controller';
 
 @Module({
   imports: [
@@ -60,7 +60,7 @@ import { HealthController } from './health.controller';
       },
     ]),
   ],
-  controllers: [ReservationsController, HealthController],
+  controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRepository],
 })
 export class ReservationsModule {}
