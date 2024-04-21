@@ -15,7 +15,7 @@ spec:
         app: auth
     spec:
       containers:
-      - image: asia-northeast3-docker.pkg.dev/secret-forest-oauth/auth/production
+      - image: 699510596669.dkr.ecr.ap-northeast-2.amazonaws.com/auth:latest
         name: auth
         env:
           - name: MONGODB_URI
