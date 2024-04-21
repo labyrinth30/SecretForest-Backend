@@ -15,7 +15,7 @@ spec:
         app: notifications
     spec:
       containers:
-      - image: asia-northeast3-docker.pkg.dev/secret-forest-oauth/notifications/production
+      - image: 699510596669.dkr.ecr.ap-northeast-2.amazonaws.com/notifications:latest
         name: notifications
         env:
           - name: PORT
@@ -36,4 +36,3 @@ spec:
                 key: refreshToken
         ports:
           - containerPort: 3000
-
