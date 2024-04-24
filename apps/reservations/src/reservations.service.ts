@@ -21,10 +21,10 @@ export class ReservationsService {
       timestamp: new Date(),
       userId,
     });
-    this.notificationService.emit('notify_email', {
-      email,
-      text: 'Reservation created',
-    });
+    // this.notificationService.emit('notify_email', {
+    //   email,
+    //   text: 'Reservation created',
+    // });
     return newReservations;
   }
 

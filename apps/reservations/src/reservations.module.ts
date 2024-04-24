@@ -16,6 +16,7 @@ import {
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AUTH_SERVICE } from '@app/common/const/services';
+import { ThemesModule } from './themes/themes.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { AUTH_SERVICE } from '@app/common/const/services';
         inject: [ConfigService],
       },
     ]),
+    ThemesModule,
   ],
   controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRepository],
