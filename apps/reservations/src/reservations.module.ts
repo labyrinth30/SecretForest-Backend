@@ -9,22 +9,18 @@ import {
 } from '@app/common';
 import { ReservationsRepository } from './reservations.repository';
 import * as Joi from 'joi';
-import {
-  ReservationDocument,
-  ReservationSchema,
-} from './models/reservation.schema';
+import { Reservation } from './models/reservations.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AUTH_SERVICE } from '@app/common/const/services';
 import { ThemesModule } from './themes/themes.module';
+import { SlotsModule } from './slots/slots.module';
 
 @Module({
   imports: [
     HealthModule,
     DatabaseModule,
-    DatabaseModule.forFeature([
-      { name: ReservationDocument.name, schema: ReservationSchema },
-    ]),
+    DatabaseModule.forFeature([Reservation]),
     LoggerModule,
     ConfigModule.forRoot({
       isGlobal: true,
@@ -61,6 +57,7 @@ import { ThemesModule } from './themes/themes.module';
       },
     ]),
     ThemesModule,
+    SlotsModule,
   ],
   controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRepository],

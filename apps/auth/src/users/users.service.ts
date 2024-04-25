@@ -8,7 +8,7 @@ import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcryptjs';
 import { GetUserDto } from './dto/get-user.dto';
 import { Types } from 'mongoose';
-import { UserDocument } from './models/user.schema';
+import { UserDocument } from './models/users.entity';
 
 @Injectable()
 export class UsersService {

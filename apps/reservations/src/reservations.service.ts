@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ReservationsRepository } from './reservations.repository';
-import { Types } from 'mongoose';
 import { NOTIFICATIONS_SERVICE, UserDto } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
 @Injectable()
@@ -14,18 +13,17 @@ export class ReservationsService {
   ) {}
   async create(
     createReservationDto: CreateReservationDto,
-    { email, _id: userId }: UserDto,
+    { email, id: userId }: UserDto,
   ) {
-    const newReservations = await this.reservationsRepository.create({
+    const newReservation = this.reservationsRepository.create({
       ...createReservationDto,
-      timestamp: new Date(),
       userId,
     });
-    // this.notificationService.emit('notify_email', {
-    //   email,
-    //   text: 'Reservation created',
-    // });
-    return newReservations;
+    this.notificationService.emit('notify_email', {
+      email,
+      text: 'Reservation created',
+    });
+    return newReservation;
   }
 
   findAll() {
@@ -33,22 +31,19 @@ export class ReservationsService {
   }
 
   findOne(_id: string) {
-    const objectId = new Types.ObjectId(_id);
     return this.reservationsRepository.findOne({
-      _id: objectId,
+      _id,
     });
   }
 
   update(_id: string, updateReservationDto: UpdateReservationDto) {
-    const objectId = new Types.ObjectId(_id);
     return this.reservationsRepository.findOneAndUpdate(
-      { _id: objectId },
+      { _id },
       { $set: updateReservationDto },
     );
   }
 
   remove(_id: string) {
-    const objectId = new Types.ObjectId(_id);
-    return this.reservationsRepository.findOneAndDelete({ _id: objectId });
+    return this.reservationsRepository.findOneAndDelete({ _id });
   }
 }

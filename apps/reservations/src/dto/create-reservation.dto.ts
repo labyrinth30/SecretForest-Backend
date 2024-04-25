@@ -1,30 +1,34 @@
 import {
   IsDateString,
-  IsInt,
+  IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
-  Max,
   Min,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export class CreateReservationDto {
+  @IsNotEmpty()
   @IsString()
-  readonly userId: string; // 고객 ID
+  userId: string; // 고객 ID
 
+  @IsNotEmpty()
   @IsString()
-  readonly themeId: string; // 테마 ID
+  themeId: string; // 테마 ID
 
+  @IsNotEmpty()
+  slotId: string; // 예약 슬롯 ID
+
+  @IsNotEmpty()
   @IsDateString()
-  @Type(() => Date)
-  readonly date: Date; // 예약 날짜 및 시간
+  date: Date; // 예약 날짜 및 시간
 
-  @IsInt()
+  @IsNotEmpty()
+  @IsNumber()
   @Min(1)
-  @Max(6)
-  readonly participants: number; // 참가자 수
+  participants: number; // 참가자 수
 
-  @IsString()
   @IsOptional()
-  readonly notes?: string; // 특별 요청 사항 (선택 사항)
+  @IsString()
+  notes: string; // 특별 요청 사항 (선택 사항)
 }
