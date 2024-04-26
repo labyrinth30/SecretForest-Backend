@@ -6,14 +6,18 @@ import { Column, Entity } from 'typeorm';
 export class Users extends AbstractEntity<Users> {
   @Column()
   name: string;
+
   @Column()
   @IsEmail()
   @IsNotEmpty()
   email: string;
+
   @Column()
   password: string;
+
   @Column()
   providerId: string;
+
   @Column({
     enum: Object.values(RolesEnum),
     default: RolesEnum.USER,

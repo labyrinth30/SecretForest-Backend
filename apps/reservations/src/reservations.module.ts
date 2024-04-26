@@ -7,20 +7,21 @@ import {
   LoggerModule,
   NOTIFICATIONS_SERVICE,
 } from '@app/common';
-import { ReservationsRepository } from './reservations.repository';
 import * as Joi from 'joi';
-import { Reservation } from './models/reservations.entity';
+import { Reservations } from './models/reservations.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AUTH_SERVICE } from '@app/common/const/services';
 import { ThemesModule } from './themes/themes.module';
 import { SlotsModule } from './slots/slots.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([Reservations]),
     HealthModule,
     DatabaseModule,
-    DatabaseModule.forFeature([Reservation]),
+    DatabaseModule.forFeature([Reservations]),
     LoggerModule,
     ConfigModule.forRoot({
       isGlobal: true,
@@ -60,6 +61,6 @@ import { SlotsModule } from './slots/slots.module';
     SlotsModule,
   ],
   controllers: [ReservationsController],
-  providers: [ReservationsService, ReservationsRepository],
+  providers: [ReservationsService],
 })
 export class ReservationsModule {}

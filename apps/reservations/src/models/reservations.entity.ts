@@ -5,14 +5,11 @@ import { IsOptional } from 'class-validator';
 
 @Entity()
 export class Reservations extends AbstractEntity<Reservations> {
-  @ManyToOne(() => Users, (user) => user.id)
-  userId: Users; // 고객 ID
-
   @Column()
-  themeId: string; // 테마 ID
+  userId: number; // 고객 ID
 
   @OneToOne(() => Slot, (slot) => slot.reservation)
-  slotId: string; // 예약 슬롯 ID
+  slotId: number; // 예약 슬롯 ID
 
   @Column()
   date: Date; // 예약 날짜 및 시간

@@ -45,7 +45,7 @@ export class UsersService {
   }
 
   async getUser(getUserDto: GetUserDto) {
-    const userId = new Types.ObjectId(getUserDto._id);
+    const userId = new Types.ObjectId(getUserDto.id);
     return this.usersRepository.findOne({
       _id: userId,
     });

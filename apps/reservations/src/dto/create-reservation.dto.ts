@@ -10,14 +10,10 @@ import {
 export class CreateReservationDto {
   @IsNotEmpty()
   @IsString()
-  userId: string; // 고객 ID
+  userId: number; // 고객 ID
 
   @IsNotEmpty()
-  @IsString()
-  themeId: string; // 테마 ID
-
-  @IsNotEmpty()
-  slotId: string; // 예약 슬롯 ID
+  slotId: number; // 예약 슬롯 ID
 
   @IsNotEmpty()
   @IsDateString()

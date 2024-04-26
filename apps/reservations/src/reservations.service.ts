@@ -1,49 +1,74 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
-import { ReservationsRepository } from './reservations.repository';
 import { NOTIFICATIONS_SERVICE, UserDto } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Reservations } from './models/reservations.entity';
+import { Repository } from 'typeorm';
 @Injectable()
 export class ReservationsService {
   constructor(
-    private readonly reservationsRepository: ReservationsRepository,
+    @InjectRepository(Reservations)
+    private readonly reservationsRepository: Repository<Reservations>,
     @Inject(NOTIFICATIONS_SERVICE)
     private readonly notificationService: ClientProxy,
   ) {}
-  async create(
+  async createReservation(
     createReservationDto: CreateReservationDto,
-    { email, id: userId }: UserDto,
+    { email, id }: UserDto,
   ) {
     const newReservation = this.reservationsRepository.create({
       ...createReservationDto,
-      userId,
+      userId: id,
     });
     this.notificationService.emit('notify_email', {
       email,
       text: 'Reservation created',
     });
+    await this.reservationsRepository.save(newReservation);
     return newReservation;
   }
 
-  findAll() {
+  async findAll() {
     return this.reservationsRepository.find({});
   }
 
-  findOne(_id: string) {
-    return this.reservationsRepository.findOne({
-      _id,
+  async getReservationById(id: number) {
+    const reservation = await this.reservationsRepository.findOne({
+      where: {
+        id,
+      }
     });
+    if (!reservation) {
+      throw new NotFoundException('게시물을 찾을 수 없습니다.');
+    }
+    return reservation;
   }
 
-  update(_id: string, updateReservationDto: UpdateReservationDto) {
-    return this.reservationsRepository.findOneAndUpdate(
-      { _id },
-      { $set: updateReservationDto },
-    );
+  async update(id: number, updateReservationDto: UpdateReservationDto) {
+    const reservation = await this.reservationsRepository.findOne({
+      where: { id },
+    });
+
+    if (!reservation) {
+      throw new NotFoundException('예약을 찾을 수 없습니다.');
+    }
+
+    for (const key in updateReservationDto) {
+      if (updateReservationDto.hasOwnProperty(key)) {
+        reservation[key] = updateReservationDto[key];
+      }
+    }
+
+    await this.reservationsRepository.save(reservation); // 변경사항 저장
+    return reservation;
   }
 
-  remove(_id: string) {
-    return this.reservationsRepository.findOneAndDelete({ _id });
+
+  async remove(id: number) {
+    const reservation = await this.getReservationById(id);
+    await this.reservationsRepository.remove(reservation);
+    return true;
   }
 }
