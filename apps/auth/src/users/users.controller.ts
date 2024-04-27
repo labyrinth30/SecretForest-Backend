@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { CurrentUser, Users } from '@app/common';
@@ -13,9 +13,17 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Get()
+  @Get('me')
   @UseGuards(JwtAuthGuard)
-  async getUsers(@CurrentUser() user: Users) {
+  async getMe(@CurrentUser() user: Users) {
     return user;
+  }
+  @Get()
+  async get() {
+    return this.usersService.findAll();
+  }
+  @Delete(':id')
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.deleteByUserId(id);
   }
 }
