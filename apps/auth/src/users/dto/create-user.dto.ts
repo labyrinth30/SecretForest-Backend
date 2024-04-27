@@ -1,4 +1,10 @@
-import { IsEmail, IsOptional, IsString, IsStrongPassword } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+} from 'class-validator';
+import { RolesEnum } from '@app/common';
 
 export class CreateUserDto {
   @IsString()
