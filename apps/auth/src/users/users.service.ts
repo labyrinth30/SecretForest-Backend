@@ -4,15 +4,18 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcryptjs';
 import { GetUserDto } from './dto/get-user.dto';
-import { Types } from 'mongoose';
-import { UserDocument } from './models/user.schema';
+import { Users } from '@app/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    @InjectRepository(Users)
+    private readonly usersRepository: Repository<Users>,
+  ) {}
   async create(createUserDto: CreateUserDto) {
     await this.validateCreateUserDto(createUserDto);
     return this.usersRepository.create({
@@ -23,7 +26,9 @@ export class UsersService {
   async validateCreateUserDto(createUserDto: CreateUserDto) {
     try {
       await this.usersRepository.findOne({
-        email: createUserDto.email,
+        where: {
+          email: createUserDto.email,
+        },
       });
     } catch (error) {
       return;
@@ -32,7 +37,9 @@ export class UsersService {
   }
   async verifyUser(email: string, password: string) {
     const user = await this.usersRepository.findOne({
-      email,
+      where: {
+        email,
+      },
     });
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!user) {
@@ -45,16 +52,17 @@ export class UsersService {
   }
 
   async getUser(getUserDto: GetUserDto) {
-    const userId = new Types.ObjectId(getUserDto._id);
     return this.usersRepository.findOne({
-      _id: userId,
+      where: {
+        id: getUserDto.id,
+      },
     });
   }
   async findByEmailOrSave(
     email: string,
     name: string,
     providerId: string,
-  ): Promise<UserDocument> {
+  ): Promise<Users> {
     const foundUser = await this.usersRepository.findOne({
       where: {
         email,
@@ -63,7 +71,7 @@ export class UsersService {
     if (foundUser) {
       return foundUser;
     }
-    const newUser = await this.usersRepository.create({
+    const newUser = this.usersRepository.create({
       password: '',
       email,
       name,

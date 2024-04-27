@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { CurrentUser, UserDocument } from '@app/common';
+import { CurrentUser, Users } from '@app/common';
 import { Response } from 'express';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -29,7 +29,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login/email')
   async login(
-    @CurrentUser() user: UserDocument,
+    @CurrentUser() user: Users,
     @Res({ passthrough: true }) response: Response,
   ) {
     await this.authService.login(user, response);
@@ -40,13 +40,13 @@ export class AuthController {
   }
   @Post('token/access')
   @UseGuards(JwtAuthGuard)
-  tokenAccess(@CurrentUser() user: UserDocument) {
+  tokenAccess(@CurrentUser() user: Users) {
     const newToken = this.authService.rotateToken(user, false);
     return { accessToken: newToken };
   }
   @Post('token/refresh')
   @UseGuards(JwtAuthGuard)
-  tokenRefresh(@CurrentUser() user: UserDocument, @Res() res: Response) {
+  tokenRefresh(@CurrentUser() user: Users, @Res() res: Response) {
     const newToken = this.authService.rotateToken(user, true);
     res.cookie('refreshToken', newToken, {
       httpOnly: true,
@@ -64,7 +64,7 @@ export class AuthController {
   @Get('google')
   @UseGuards(GoogleAuthGuard)
   googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
-    const user = req as unknown as UserDocument;
+    const user = req as unknown as Users;
     return this.authService.googleLogin(user, res);
   }
 }

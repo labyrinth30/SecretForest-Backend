@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserDocument } from '@app/common';
+import { Users } from '@app/common';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -14,7 +14,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
   ) {}
-  async login(user: UserDocument, response: Response) {
+  async login(user: Users, response: Response) {
     const accessToken = this.signToken(user, false);
     const refreshToken = this.signToken(user, true);
     response.cookie('refreshToken', refreshToken, {
@@ -22,14 +22,14 @@ export class AuthService {
       maxAge: 1000 * 60 * 60,
     });
     return response.json({
-      id: user._id,
+      id: user.id,
       email: user.email,
       accessToken,
     });
   }
-  signToken(user: UserDocument, isRefreshToken: boolean): string {
+  signToken(user: Users, isRefreshToken: boolean): string {
     const tokenPayload: TokenPayload = {
-      userId: user._id.toHexString(),
+      userId: user.id,
       type: isRefreshToken ? 'refresh' : 'access',
     };
     return this.jwtService.sign(tokenPayload, {
@@ -37,7 +37,7 @@ export class AuthService {
       expiresIn: isRefreshToken ? 3600 : 300,
     });
   }
-  rotateToken(user: UserDocument, isRefreshToken: boolean): string {
+  rotateToken(user: Users, isRefreshToken: boolean): string {
     return this.signToken(
       {
         ...user,
@@ -53,7 +53,7 @@ export class AuthService {
     response.clearCookie('refreshToken');
     return response.json({ message: '로그아웃 되었습니다.' });
   }
-  googleLogin(user: UserDocument, res: Response) {
+  googleLogin(user: Users, res: Response) {
     return this.login(user, res);
   }
 }
