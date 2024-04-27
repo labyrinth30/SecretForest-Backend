@@ -2,14 +2,15 @@ import { Module } from '@nestjs/common';
 import { SlotsService } from './slots.service';
 import { SlotsController } from './slots.controller';
 import { DatabaseModule, LoggerModule } from '@app/common';
-import { SlotDocument, SlotEntity } from './models/slot.entity';
+import { Slot } from './models/slot.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ThemesModule } from '../themes/themes.module';
+import { Theme } from '../themes/models/theme.entity';
 
 @Module({
   imports: [
     DatabaseModule,
-    DatabaseModule.forFeature([
-      { name: SlotDocument.name, schema: SlotEntity },
-    ]),
+    TypeOrmModule.forFeature([Slot, Theme]),
     LoggerModule,
   ],
   controllers: [SlotsController],

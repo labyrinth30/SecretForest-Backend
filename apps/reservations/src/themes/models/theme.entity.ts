@@ -1,26 +1,29 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AbstractEntity } from '@app/common';
-
-@Schema({ versionKey: false })
+import { Column, Entity, OneToMany } from 'typeorm';
+import { Slot } from '../../slots/models/slot.entity';
+@Entity()
 export class Theme extends AbstractEntity<Theme> {
-  @Prop({ required: true })
+  @Column()
   title: string; // 테마 이름
 
-  @Prop({ required: true })
+  @Column()
   description: string; // 테마 설명
 
-  @Prop({ required: true })
+  @Column()
   price: number; // 테마 가격
 
-  @Prop({ required: true })
+  @Column()
   difficulty: number; // 난이도
 
-  @Prop({ required: true })
+  @Column()
   time: number; // 제한 시간
 
-  @Prop({ required: true })
+  @Column()
   fear: number; // 공포도
 
-  @Prop({ required: true })
+  @Column()
   capacity: number; // 수용 인원
+
+  @OneToMany(() => Slot, (slot) => slot.theme)
+  slots: Slot[]; // 테마의 슬롯
 }

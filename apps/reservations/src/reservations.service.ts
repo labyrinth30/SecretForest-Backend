@@ -38,7 +38,7 @@ export class ReservationsService {
     const reservation = await this.reservationsRepository.findOne({
       where: {
         id,
-      }
+      },
     });
     if (!reservation) {
       throw new NotFoundException('게시물을 찾을 수 없습니다.');
@@ -64,7 +64,6 @@ export class ReservationsService {
     await this.reservationsRepository.save(reservation); // 변경사항 저장
     return reservation;
   }
-
 
   async remove(id: number) {
     const reservation = await this.getReservationById(id);
