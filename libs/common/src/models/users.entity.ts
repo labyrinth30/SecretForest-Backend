@@ -21,10 +21,6 @@ export class Users extends AbstractEntity<Users> {
   })
   providerId: string;
 
-  @Column({
-    type: 'enum',
-    enum: RolesEnum,
-    default: RolesEnum.USER,
-  })
-  role: RolesEnum;
+  @Column({ type: 'json', nullable: true })
+  roles: string[];
 }

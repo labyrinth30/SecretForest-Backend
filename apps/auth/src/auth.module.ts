@@ -33,15 +33,6 @@ import { RolesGuard } from './users/guards/roles.guard';
     }),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    LocalStrategy,
-    JwtStrategy,
-    GoogleStrategy,
-    {
-      provide: 'APP_GUARD',
-      useClass: RolesGuard,
-    },
-  ],
+  providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy],
 })
 export class AuthModule {}

@@ -1,10 +1,10 @@
 import {
-  IsEmail,
+  IsArray,
+  IsEmail, IsNotEmpty,
   IsOptional,
   IsString,
   IsStrongPassword,
 } from 'class-validator';
-import { RolesEnum } from '@app/common';
 
 export class CreateUserDto {
   @IsString()
@@ -20,4 +20,10 @@ export class CreateUserDto {
   @IsStrongPassword()
   @IsOptional()
   password: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  @IsNotEmpty()
+  roles?: string[];
 }

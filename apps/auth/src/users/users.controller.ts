@@ -28,6 +28,7 @@ export class UsersController {
     return user;
   }
   @Get()
+  @Roles('Admin')
   async get() {
     return this.usersService.findAll();
   }
