@@ -9,6 +9,15 @@ import { Transport } from '@nestjs/microservices';
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
   const configService = app.get(ConfigService);
+  // CORS 설정 추가
+  app.enableCors({
+    // 모든 출처 허용
+    origin: true,
+    allowedHeaders:
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true, // 크로스 사이트 요청 시, 쿠키/인증 헤더 등을 허용
+  });
   app.connectMicroservice({
     transport: Transport.TCP,
     options: {

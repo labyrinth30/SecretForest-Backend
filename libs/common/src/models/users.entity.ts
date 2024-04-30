@@ -1,4 +1,4 @@
-import { AbstractEntity, RolesEnum } from '@app/common';
+import { AbstractEntity } from '@app/common';
 import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 import { Column, Entity } from 'typeorm';
 
