@@ -9,6 +9,7 @@ import * as Joi from 'joi';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
+import { RolesGuard } from './users/guards/roles.guard';
 
 @Module({
   imports: [

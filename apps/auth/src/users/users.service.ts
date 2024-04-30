@@ -18,23 +18,23 @@ export class UsersService {
   ) {}
   async create(createUserDto: CreateUserDto) {
     await this.validateCreateUserDto(createUserDto);
-    return this.usersRepository.create({
+    const user = this.usersRepository.create({
       ...createUserDto,
       password: await bcrypt.hash(createUserDto.password, 10),
     });
+    return this.usersRepository.save(user);
   }
   async validateCreateUserDto(createUserDto: CreateUserDto) {
-    try {
-      await this.usersRepository.findOne({
-        where: {
-          email: createUserDto.email,
-        },
-      });
-    } catch (error) {
-      return;
+    const user = await this.usersRepository.findOne({
+      where: {
+        email: createUserDto.email,
+      },
+    });
+    if (user) {
+      throw new UnprocessableEntityException('이미 사용 중인 이메일입니다.');
     }
-    throw new UnprocessableEntityException('이미 사용 중인 이메일입니다.');
   }
+
   async verifyUser(email: string, password: string) {
     const user = await this.usersRepository.findOne({
       where: {
@@ -78,5 +78,20 @@ export class UsersService {
       providerId,
     });
     return newUser;
+  }
+  async findAll() {
+    return this.usersRepository.find();
+  }
+  async deleteByUserId(userId: number) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      throw new UnprocessableEntityException('사용자를 찾을 수 없습니다.');
+    }
+    await this.usersRepository.delete(userId);
+    return userId;
   }
 }
