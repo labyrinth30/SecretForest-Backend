@@ -11,7 +11,9 @@ export class Slot extends AbstractEntity<Slot> {
   @Column()
   startTime: Date; // 테마 시작 시간
 
-  @Column()
+  @Column({
+    default: 1,
+  })
   available: boolean; // 슬롯의 예약 가능 여부
 
   @OneToOne(() => Reservations, (reservation) => reservation.slotId)
