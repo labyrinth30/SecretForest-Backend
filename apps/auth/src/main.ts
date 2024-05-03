@@ -5,9 +5,17 @@ import { Logger } from 'nestjs-pino';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { Transport } from '@nestjs/microservices';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
+  const options = new DocumentBuilder()
+    .setTitle('Auth API')
+    .setDescription('The Auth API description')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api-docs', app, document);
   const configService = app.get(ConfigService);
   // CORS 설정 추가
   app.enableCors({
