@@ -1,6 +1,7 @@
 import {
   IsArray,
-  IsEmail, IsNotEmpty,
+  IsEmail,
+  IsNotEmpty,
   IsOptional,
   IsString,
   IsStrongPassword,
