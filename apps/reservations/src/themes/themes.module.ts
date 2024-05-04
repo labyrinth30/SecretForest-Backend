@@ -4,12 +4,13 @@ import { ThemesController } from './themes.controller';
 import { DatabaseModule, LoggerModule } from '@app/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Reservations } from '../models/reservations.entity';
-import { Slot } from '../slots/models/slot.entity';
+import { Slots } from '../slots/models/slots.entity';
+import { Themes } from './models/themes.entity';
 
 @Module({
   imports: [
     DatabaseModule,
-    TypeOrmModule.forFeature([Reservations, Slot]),
+    TypeOrmModule.forFeature([Reservations, Slots, Themes]),
     LoggerModule,
   ],
   controllers: [ThemesController],
