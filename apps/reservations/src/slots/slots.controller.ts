@@ -26,8 +26,6 @@ export class SlotsController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
-  @Roles('Admin')
   findAll() {
     return this.slotsService.findAll();
   }

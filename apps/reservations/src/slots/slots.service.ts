@@ -5,26 +5,49 @@ import { Slots } from './models/slots.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { Themes } from '../themes/models/themes.entity';
 
 @Injectable()
 export class SlotsService {
   constructor(
     @InjectRepository(Slots)
     private slotsRepository: Repository<Slots>,
+    @InjectRepository(Themes)
+    private themesRepository: Repository<Themes>,
   ) {}
 
   async create(createSlotDto: CreateSlotDto) {
-    const newSlot = this.slotsRepository.create(createSlotDto);
-    return await this.slotsRepository.save(newSlot);
+    const theme = await this.themesRepository.findOne({
+      where: {
+        id: createSlotDto.themeId,
+      },
+    });
+    if (!theme) {
+      throw new NotFoundException(
+        `Theme not found with id: ${createSlotDto.themeId}`,
+      );
+    }
+    const slot = this.slotsRepository.create({
+      ...createSlotDto,
+      theme,
+    });
+    return this.slotsRepository.save(slot);
   }
 
   async findAll() {
-    const slots = await this.slotsRepository.find();
+    const slots = await this.slotsRepository.find({
+      relations: ['theme'],
+    });
     return slots;
   }
 
   async findSlotById(id: number): Promise<Slots> {
-    const slot = await this.slotsRepository.findOne({ where: { id } });
+    const slot = await this.slotsRepository.findOne({
+      relations: ['theme'],
+      where: {
+        id,
+      },
+    });
     this.notFoundExceptionIfNotExists(slot, `Slot not found with id: ${id}`);
     return slot;
   }
@@ -52,23 +75,29 @@ export class SlotsService {
       throw new NotFoundException(errorMessage);
     }
   }
-  // TODO: 매일 자정마다 일주일 뒤의 예약 슬롯을 생성
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async generateWeeklySlots() {
-    const dateAWeekLater = new Date();
-    dateAWeekLater.setDate(dateAWeekLater.getDate() + 7);
+    const themes = await this.themesRepository.find();
+    for (const theme of themes) {
+      const currentDate = new Date();
+      const nextWeekOfToday = new Date(
+        currentDate.setDate(currentDate.getDate() + 7),
+      );
 
-    // 일주일 후 날짜에 대한 예약 슬롯 생성 로직
-    // 예시: 매일 자정에 다음 주의 각 요일에 대한 슬롯 생성
-    for (let i = 0; i < 7; i++) {
-      const slotDate = new Date(dateAWeekLater);
-      slotDate.setDate(dateAWeekLater.getDate() + i);
-      const createSlotDto = new CreateSlotDto();
-      // CreateSlotDto 구조에 맞게 날짜와 기타 정보 설정
-      createSlotDto.startTime = slotDate;
-      // 기타 필요한 속성 설정...
+      for (const time of theme.timetable) {
+        const [hours, minutes] = time.split(':');
+        const startTime = new Date(
+          nextWeekOfToday.setHours(parseInt(hours), parseInt(minutes), 0),
+        );
 
-      await this.create(createSlotDto);
+        const newSlot = this.slotsRepository.create({
+          theme: theme,
+          startTime: startTime,
+          available: true,
+        });
+
+        await this.slotsRepository.save(newSlot);
+      }
     }
   }
 }
