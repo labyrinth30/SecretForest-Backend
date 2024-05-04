@@ -28,7 +28,7 @@ export class ThemesController {
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.themesService.findOne(id);
+    return this.themesService.findThemeById(id);
   }
 
   @Patch(':id')

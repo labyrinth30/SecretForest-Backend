@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
 import { Themes } from './models/themes.entity';
@@ -11,12 +11,18 @@ export class ThemesService {
     @InjectRepository(Themes)
     private themesRepository: Repository<Themes>,
   ) {}
+
+  async findThemeById(id: number): Promise<Themes> {
+    const theme = await this.themesRepository.findOne({ where: { id } });
+    this.notFoundExceptionIfNotExists(theme, `Theme not found with id: ${id}`);
+    return theme;
+  }
+
   create(createThemeDto: CreateThemeDto) {
     const theme = this.themesRepository.create({
       ...createThemeDto,
     });
-    const newTheme = this.themesRepository.save(theme);
-    return newTheme;
+    return this.themesRepository.save(theme);
   }
 
   async findAll() {
@@ -24,24 +30,8 @@ export class ThemesService {
     return themes;
   }
 
-  async findOne(id: number) {
-    const theme = await this.themesRepository.findOne({
-      where: {
-        id,
-      },
-    });
-    return theme;
-  }
-
   async update(id: number, updateThemeDto: UpdateThemeDto) {
-    const theme = await this.themesRepository.findOne({
-      where: {
-        id,
-      },
-    });
-    if (!theme) {
-      throw new NotFoundException(`Theme not found with id: ${id}`);
-    }
+    const theme = await this.findThemeById(id); // 재사용
     const updatedTheme = await this.themesRepository.save({
       ...theme,
       ...updateThemeDto,
@@ -50,15 +40,17 @@ export class ThemesService {
   }
 
   async remove(id: number) {
-    const theme = await this.themesRepository.findOne({
-      where: {
-        id,
-      },
-    });
-    if (!theme) {
-      throw new NotFoundException(`Theme not found with id: ${id}`);
-    }
+    const theme = await this.findThemeById(id); // 재사용
     await this.themesRepository.remove(theme);
     return id;
+  }
+
+  private notFoundExceptionIfNotExists<T>(
+    entity: T | null,
+    errorMessage: string,
+  ): void {
+    if (!entity) {
+      throw new NotFoundException(errorMessage);
+    }
   }
 }
