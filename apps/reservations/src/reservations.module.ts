@@ -5,7 +5,7 @@ import {
   DatabaseModule,
   HealthModule,
   LoggerModule,
-  NOTIFICATIONS_SERVICE,
+  NOTIFICATIONS_SERVICE, Users,
 } from '@app/common';
 import * as Joi from 'joi';
 import { Reservations } from './models/reservations.entity';
@@ -20,7 +20,7 @@ import { Slots } from './slots/models/slots.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Reservations, Slots, Themes]),
+    TypeOrmModule.forFeature([Reservations, Slots, Themes, Users]),
     HealthModule,
     DatabaseModule,
     DatabaseModule.forFeature([Reservations]),
