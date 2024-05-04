@@ -26,8 +26,8 @@ export class ReservationsService {
     const users: Users = await this.usersRepository.findOne({
       where: {
         id,
-      }
-    })
+      },
+    });
     const slot = await this.slotsRepository.findOne({
       relations: ['reservation', 'theme'],
       where: {
@@ -35,7 +35,7 @@ export class ReservationsService {
       },
     });
     if (!slot) {
-      throw new NotFoundException('잘못된 id를 입력하였습니다..');
+      throw new NotFoundException('없는 slotId를 입력하였습니다.');
     }
     if (slot.available === false) {
       throw new NotFoundException('예약이 마감되었습니다.');
@@ -43,6 +43,7 @@ export class ReservationsService {
     const newReservation = this.reservationsRepository.create({
       ...createReservationDto,
       userId: id,
+      slotId: slot.id,
     });
     slot.available = false;
     await this.slotsRepository.save(slot);
@@ -53,15 +54,17 @@ export class ReservationsService {
     const startTime = new Date(slot.startTime); // slot.startTime이 Date 타입이라고 가정
     const koreaStartTime = new Date(startTime.getTime() + koreaTimeOffset); // 한국 시간으로 변환
 
-    const formattedStartTime = koreaStartTime.toLocaleString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-    }).replace('오전', 'am').replace('오후', 'pm'); // '2022년 November 1일 12:30 pm' 형식으로 변환
-
+    const formattedStartTime = koreaStartTime
+      .toLocaleString('ko-KR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+      })
+      .replace('오전', 'am')
+      .replace('오후', 'pm'); // '2022년 November 1일 12:30 pm' 형식으로 변환
 
     const htmlContent = `
   <div style="font-family: Arial, sans-serif; color: #333;">
@@ -93,33 +96,35 @@ export class ReservationsService {
       },
     });
     if (!reservation) {
-      throw new NotFoundException('게시물을 찾을 수 없습니다.');
+      throw new NotFoundException(`id가 ${id}인 예약을 찾을 수 없습니다.`);
     }
     return reservation;
   }
 
   async update(id: number, updateReservationDto: UpdateReservationDto) {
-    const reservation = await this.reservationsRepository.findOne({
-      where: { id },
-    });
-
-    if (!reservation) {
-      throw new NotFoundException('예약을 찾을 수 없습니다.');
-    }
+    const reservation = await this.getReservationById(id);
 
     for (const key in updateReservationDto) {
       if (updateReservationDto.hasOwnProperty(key)) {
         reservation[key] = updateReservationDto[key];
       }
     }
-
     await this.reservationsRepository.save(reservation); // 변경사항 저장
     return reservation;
   }
 
   async remove(id: number) {
+    const slot = await this.slotsRepository.findOne({
+      where: {
+        reservation: {
+          id,
+        },
+      },
+    });
     const reservation = await this.getReservationById(id);
     await this.reservationsRepository.remove(reservation);
-    return true;
+    slot.available = true;
+    await this.slotsRepository.save(slot);
+    return id;
   }
 }

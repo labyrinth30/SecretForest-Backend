@@ -10,7 +10,10 @@ export class Reservations extends AbstractEntity<Reservations> {
 
   @OneToOne(() => Slots, (slot) => slot.reservation)
   @JoinColumn()
-  slot: Slots; // 예약 슬롯 ID
+  slot: Slots; // 예약 슬롯
+
+  @Column()
+  slotId: number; // 예약 슬롯 ID
 
   @Column()
   participants: number; // 참가자 수
