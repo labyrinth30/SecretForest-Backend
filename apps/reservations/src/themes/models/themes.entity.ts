@@ -1,8 +1,8 @@
 import { AbstractEntity } from '@app/common';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { Slot } from '../../slots/models/slot.entity';
+import { Slots } from '../../slots/models/slots.entity';
 @Entity()
-export class Theme extends AbstractEntity<Theme> {
+export class Themes extends AbstractEntity<Themes> {
   @Column()
   title: string; // 테마 이름
 
@@ -21,9 +21,6 @@ export class Theme extends AbstractEntity<Theme> {
   @Column()
   fear: number; // 공포도
 
-  @Column()
-  capacity: number; // 수용 인원
-
-  @OneToMany(() => Slot, (slot) => slot.theme)
-  slots: Slot[]; // 테마의 슬롯
+  @OneToMany(() => Slots, (slot) => slot.theme)
+  slots: Slots[]; // 테마의 슬롯
 }

@@ -28,13 +28,12 @@ export class UsersController {
     return user;
   }
   @Get()
-  @Roles('Admin')
   async get() {
     return this.usersService.findAll();
   }
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  @Roles(RolesEnum.ADMIN)
+  @Roles('Admin')
   async delete(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.deleteByUserId(id);
   }
