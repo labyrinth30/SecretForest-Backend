@@ -16,6 +16,6 @@ export class Slots extends AbstractEntity<Slots> {
   })
   available: boolean; // 슬롯의 예약 가능 여부
 
-  @OneToOne(() => Reservations, (reservation) => reservation.slotId)
+  @OneToOne(() => Reservations, (reservation) => reservation.slot)
   reservation: Reservations; // 예약 정보
 }

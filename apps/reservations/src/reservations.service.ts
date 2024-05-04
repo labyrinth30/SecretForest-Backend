@@ -6,6 +6,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reservations } from './models/reservations.entity';
 import { Repository } from 'typeorm';
+import { Slots } from './slots/models/slots.entity';
 @Injectable()
 export class ReservationsService {
   constructor(
@@ -13,18 +14,43 @@ export class ReservationsService {
     private readonly reservationsRepository: Repository<Reservations>,
     @Inject(NOTIFICATIONS_SERVICE)
     private readonly notificationService: ClientProxy,
+    @InjectRepository(Slots)
+    private readonly slotsRepository: Repository<Slots>,
   ) {}
   async createReservation(
     createReservationDto: CreateReservationDto,
     { email, id }: UserDto,
   ) {
+    const slot = await this.slotsRepository.findOne({
+      relations: ['reservation', 'theme'],
+      where: {
+        id: createReservationDto.slotId,
+      },
+    });
+    if (!slot) {
+      throw new NotFoundException('잘못된 id를 입력하였습니다..');
+    }
+    if (slot.available === false) {
+      throw new NotFoundException('예약이 마감되었습니다.');
+    }
     const newReservation = this.reservationsRepository.create({
       ...createReservationDto,
       userId: id,
     });
+    slot.available = false;
+    await this.slotsRepository.save(slot);
+    // HTML 이메일 내용 생성
+    const htmlContent = `
+    <h1>Reservation Created</h1>
+    <p>You have successfully reserved a slot.</p>
+    <p>Theme: ${slot.theme?.title}</p>
+    <p>Start Time: ${slot.startTime}</p>
+  `;
+
+    // 이메일 보내기
     this.notificationService.emit('notify_email', {
       email,
-      text: 'Reservation created',
+      html: htmlContent,
     });
     await this.reservationsRepository.save(newReservation);
     return newReservation;
