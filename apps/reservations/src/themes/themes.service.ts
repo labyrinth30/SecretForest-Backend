@@ -31,7 +31,7 @@ export class ThemesService {
   }
 
   async update(id: number, updateThemeDto: UpdateThemeDto) {
-    const theme = await this.findThemeById(id); // 재사용
+    const theme = await this.findThemeById(id);
     const updatedTheme = await this.themesRepository.save({
       ...theme,
       ...updateThemeDto,

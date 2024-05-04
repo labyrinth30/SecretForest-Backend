@@ -1,13 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ThemesService } from './themes.service';
 import { ThemesController } from './themes.controller';
-import {
-  AUTH_SERVICE,
-  DatabaseModule,
-  JwtAuthGuard,
-  LoggerModule,
-  Roles,
-} from '@app/common';
+import { AUTH_SERVICE, DatabaseModule, LoggerModule } from '@app/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Reservations } from '../models/reservations.entity';
 import { Slots } from '../slots/models/slots.entity';
