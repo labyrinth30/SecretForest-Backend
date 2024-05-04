@@ -5,7 +5,7 @@ import {
   DatabaseModule,
   HealthModule,
   LoggerModule,
-  NOTIFICATIONS_SERVICE,
+  NOTIFICATIONS_SERVICE, Users,
 } from '@app/common';
 import * as Joi from 'joi';
 import { Reservations } from './models/reservations.entity';
@@ -15,10 +15,12 @@ import { AUTH_SERVICE } from '@app/common/const/services';
 import { ThemesModule } from './themes/themes.module';
 import { SlotsModule } from './slots/slots.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Themes } from './themes/models/themes.entity';
+import { Slots } from './slots/models/slots.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Reservations]),
+    TypeOrmModule.forFeature([Reservations, Slots, Themes, Users]),
     HealthModule,
     DatabaseModule,
     DatabaseModule.forFeature([Reservations]),

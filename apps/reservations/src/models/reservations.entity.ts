@@ -1,6 +1,6 @@
-import { AbstractEntity, Users } from '@app/common';
-import { Column, Entity, ManyToOne, OneToOne } from 'typeorm';
-import { Slot } from '../slots/models/slot.entity';
+import { AbstractEntity } from '@app/common';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Slots } from '../slots/models/slots.entity';
 import { IsOptional } from 'class-validator';
 
 @Entity()
@@ -8,11 +8,9 @@ export class Reservations extends AbstractEntity<Reservations> {
   @Column()
   userId: number; // 고객 ID
 
-  @OneToOne(() => Slot, (slot) => slot.reservation)
-  slotId: number; // 예약 슬롯 ID
-
-  @Column()
-  date: Date; // 예약 날짜 및 시간
+  @OneToOne(() => Slots, (slot) => slot.reservation)
+  @JoinColumn()
+  slot: Slots; // 예약 슬롯 ID
 
   @Column()
   participants: number; // 참가자 수

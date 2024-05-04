@@ -7,16 +7,20 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { SlotsService } from './slots.service';
 import { CreateSlotDto } from './dto/create-slot.dto';
 import { UpdateSlotDto } from './dto/update-slot.dto';
+import { JwtAuthGuard, Roles } from '@app/common';
 
 @Controller('slots')
 export class SlotsController {
   constructor(private readonly slotsService: SlotsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @Roles('Admin')
   create(@Body() createSlotDto: CreateSlotDto) {
     return this.slotsService.create(createSlotDto);
   }
@@ -27,17 +31,26 @@ export class SlotsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @Roles('Admin')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.slotsService.findOne(+id);
+    return this.slotsService.findSlotById(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSlotDto: UpdateSlotDto) {
-    return this.slotsService.update(+id, updateSlotDto);
+  @UseGuards(JwtAuthGuard)
+  @Roles('Admin')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateSlotDto: UpdateSlotDto,
+  ) {
+    return this.slotsService.update(id, updateSlotDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.slotsService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @Roles('Admin')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.slotsService.remove(id);
   }
 }

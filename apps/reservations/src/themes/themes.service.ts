@@ -26,12 +26,14 @@ export class ThemesService {
   }
 
   async findAll() {
-    const themes = await this.themesRepository.find();
+    const themes = await this.themesRepository.find({
+      relations: ['slots'],
+    });
     return themes;
   }
 
   async update(id: number, updateThemeDto: UpdateThemeDto) {
-    const theme = await this.findThemeById(id); // 재사용
+    const theme = await this.findThemeById(id);
     const updatedTheme = await this.themesRepository.save({
       ...theme,
       ...updateThemeDto,

@@ -17,12 +17,12 @@ export class NotificationsService {
       refreshToken: this.configService.get('GOOGLE_OAUTH_REFRESH_TOKEN'),
     },
   });
-  async notifyEmail({ email, text }: NotifyEmailDto) {
+  async notifyEmail({ email, html }: NotifyEmailDto) {
     await this.transporter.sendMail({
       from: this.configService.get('SMTP_USER'),
       to: email,
       subject: 'Secret-Forest Notification',
-      text,
+      html,
     });
   }
 }

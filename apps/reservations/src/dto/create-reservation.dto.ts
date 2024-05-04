@@ -1,5 +1,4 @@
 import {
-  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -9,15 +8,7 @@ import {
 
 export class CreateReservationDto {
   @IsNotEmpty()
-  @IsString()
-  userId: number; // 고객 ID
-
-  @IsNotEmpty()
   slotId: number; // 예약 슬롯 ID
-
-  @IsNotEmpty()
-  @IsDateString()
-  date: Date; // 예약 날짜 및 시간
 
   @IsNotEmpty()
   @IsNumber()

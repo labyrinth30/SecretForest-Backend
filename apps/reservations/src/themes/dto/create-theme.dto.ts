@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { ArrayNotEmpty, IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateThemeDto {
   @IsNotEmpty()
@@ -18,4 +18,8 @@ export class CreateThemeDto {
 
   @IsNumber()
   fear: number; // 공포도
+
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  timetable: string[]; // 테마의 타임테이블
 }
