@@ -17,9 +17,11 @@ import { SlotsModule } from './slots/slots.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Themes } from './themes/models/themes.entity';
 import { Slots } from './slots/models/slots.entity';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     TypeOrmModule.forFeature([Reservations, Slots, Themes, Users]),
     HealthModule,
     DatabaseModule,

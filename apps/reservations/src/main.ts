@@ -8,6 +8,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(ReservationsModule);
+  app.enableCors({
+    origin: true, // 모든 출처 허용
+    allowedHeaders:
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization, SameSite, Access-Control-Allow-Origin, Access-Control-Allow-Credentials,',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
+
   const options = new DocumentBuilder()
     .setTitle('Reservations API')
     .setDescription('The Reservations API description')
