@@ -22,7 +22,7 @@ async function bootstrap() {
     // 모든 출처 허용
     origin: true,
     allowedHeaders:
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization, SameSite, Access-Control-Allow-Origin, Access-Control-Allow-Credentials,',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true, // 크로스 사이트 요청 시, 쿠키/인증 헤더 등을 허용
   });

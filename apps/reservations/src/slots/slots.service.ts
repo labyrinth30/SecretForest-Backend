@@ -4,7 +4,7 @@ import { UpdateSlotDto } from './dto/update-slot.dto';
 import { Slots } from './models/slots.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import { Themes } from '../themes/models/themes.entity';
 
 @Injectable()
@@ -75,7 +75,7 @@ export class SlotsService {
       throw new NotFoundException(errorMessage);
     }
   }
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron('0 15 * * *')
   async generateWeeklySlots() {
     const themes = await this.themesRepository.find();
     for (const theme of themes) {
