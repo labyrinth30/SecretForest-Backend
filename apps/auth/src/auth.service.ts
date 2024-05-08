@@ -53,7 +53,7 @@ export class AuthService {
     response.clearCookie('refreshToken');
     return response.json({ message: '로그아웃 되었습니다.' });
   }
-  googleLogin(user: Users, res: Response) {
+  socialLogin(user: Users, res: Response) {
     return this.login(user, res);
   }
 }

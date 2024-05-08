@@ -15,6 +15,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CreateUserDto } from './users/dto/create-user.dto';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
+import { GithubAuthGuard } from './guards/github-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -63,6 +64,15 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
     const user = req as unknown as Users;
-    return this.authService.googleLogin(user, res);
+    return this.authService.socialLogin(user, res);
+  }
+  @Get('to-github')
+  @UseGuards(GithubAuthGuard)
+  async githubAuth() {}
+  @Get('github')
+  @UseGuards(GithubAuthGuard)
+  githubAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    const user = req as unknown as Users;
+    return this.authService.socialLogin(user, res);
   }
 }
