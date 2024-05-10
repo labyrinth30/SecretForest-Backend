@@ -54,6 +54,11 @@ export class AuthService {
     return response.json({ message: '로그아웃 되었습니다.' });
   }
   socialLogin(user: Users, res: Response) {
-    return this.login(user, res);
+    const refreshToken = this.signToken(user, true);
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60,
+    });
+    return res.redirect('http://localhost:63189');
   }
 }

@@ -58,7 +58,7 @@ export class UsersService {
       },
     });
   }
-  async findByEmailOrSave(
+  async findByEmailAndSave(
     email: string,
     name: string,
     providerId: string,
@@ -77,6 +77,7 @@ export class UsersService {
       name,
       providerId,
     });
+    await this.usersRepository.save(newUser);
     return newUser;
   }
   async findAll() {
