@@ -27,10 +27,10 @@ async function bootstrap() {
     credentials: true, // 크로스 사이트 요청 시, 쿠키/인증 헤더 등을 허용
   });
   app.connectMicroservice({
-    transport: Transport.TCP,
+    transport: Transport.RMQ,
     options: {
-      host: '0.0.0.0',
-      port: configService.get('TCP_PORT'),
+      urls: [configService.getOrThrow('RABBITMQ_URI')],
+      queue: 'auth',
     },
   });
   app.useGlobalPipes(
