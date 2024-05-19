@@ -19,7 +19,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     const email = emails[0].value;
 
     try {
-      const user = await this.usersService.findByEmailOrSave(
+      const user = await this.usersService.findByEmailAndSave(
         email,
         username,
         providerId,

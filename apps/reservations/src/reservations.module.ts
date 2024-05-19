@@ -5,7 +5,8 @@ import {
   DatabaseModule,
   HealthModule,
   LoggerModule,
-  NOTIFICATIONS_SERVICE, Users,
+  NOTIFICATIONS_SERVICE,
+  Users,
 } from '@app/common';
 import * as Joi from 'joi';
 import { Reservations } from './models/reservations.entity';
@@ -40,10 +41,10 @@ import { ScheduleModule } from '@nestjs/schedule';
         name: AUTH_SERVICE,
         imports: [ConfigModule],
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.TCP,
+          transport: Transport.RMQ,
           options: {
-            host: configService.get('AUTH_HOST'),
-            port: configService.get('AUTH_PORT'),
+            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
+            queue: 'auth',
           },
         }),
         inject: [ConfigService],
@@ -51,10 +52,10 @@ import { ScheduleModule } from '@nestjs/schedule';
       {
         name: NOTIFICATIONS_SERVICE,
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.TCP,
+          transport: Transport.RMQ,
           options: {
-            host: configService.get('NOTIFICATIONS_HOST'),
-            port: configService.get('NOTIFICATIONS_PORT'),
+            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
+            queue: 'notifications',
           },
         }),
         inject: [ConfigService],
