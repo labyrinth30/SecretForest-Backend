@@ -26,9 +26,7 @@ export class ThemesService {
   }
 
   async findAll() {
-    const themes = await this.themesRepository.find({
-      relations: ['slots'],
-    });
+    const themes = await this.themesRepository.find();
     return themes;
   }
 
