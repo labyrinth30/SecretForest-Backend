@@ -34,7 +34,7 @@ export class AuthService {
     };
     return this.jwtService.sign(tokenPayload, {
       secret: this.configService.get<string>('JWT_SECRET'),
-      expiresIn: isRefreshToken ? 3600 : 300,
+      expiresIn: isRefreshToken ? 3600 : 7200,
     });
   }
   rotateToken(user: Users, isRefreshToken: boolean): string {

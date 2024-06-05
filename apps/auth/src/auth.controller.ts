@@ -28,7 +28,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login/email')
   async login(
-    @CurrentUser() user: Users,
+    @Body() user: Users,
     @Res({ passthrough: true }) response: Response,
   ) {
     await this.authService.login(user, response);
