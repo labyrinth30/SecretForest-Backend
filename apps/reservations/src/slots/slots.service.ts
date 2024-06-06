@@ -34,9 +34,18 @@ export class SlotsService {
     return this.slotsRepository.save(slot);
   }
 
-  async findAll() {
+  async findAll(
+    themeId: number,
+    date: Date,
+  ) {
     const slots = await this.slotsRepository.find({
       relations: ['theme'],
+      where: {
+        startTime: date,
+        theme: {
+          id: themeId,
+        },
+      },
     });
     return slots;
   }

@@ -8,6 +8,7 @@ import {
   Delete,
   ParseIntPipe,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { SlotsService } from './slots.service';
 import { CreateSlotDto } from './dto/create-slot.dto';
@@ -26,8 +27,11 @@ export class SlotsController {
   }
 
   @Get()
-  findAll() {
-    return this.slotsService.findAll();
+  async findAll(
+    @Query('themeId', ParseIntPipe) themeId: number,
+    @Query('date') date: string,
+  ) {
+    return this.slotsService.findAll(themeId, date);
   }
 
   @Get(':id')
