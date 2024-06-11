@@ -29,7 +29,7 @@ export class SlotsController {
   @Get()
   async findAll(
     @Query('themeId', ParseIntPipe) themeId: number,
-    @Query('date') date: string,
+    @Query('date') date: Date,
   ) {
     return this.slotsService.findAll(themeId, date);
   }
