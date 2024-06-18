@@ -72,7 +72,7 @@ export class ReservationsService {
     <p>${users.name}님께,</p>
     <p>${users.name}님이 예약하신 방의 이름은 <strong>${slot.theme?.title}</strong> 입니다.</p>
     <p>예약하신 날짜는 <strong>${formattedStartTime}</strong> 입니다.</p>
-    <a href="http://google.com" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">비밀의숲 홈페이지</a>
+    <a href="https://skhu-secretforest.vercel.app/" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px;">비밀의숲 홈페이지</a>
     <p style="margin-top: 30px;">*예약을 취소하시고 싶으시면 하단의 <a href="YOUR_CANCELLATION_LINK" style="color: #007bff;">예약 취소하기</a>를 클릭하시면 자동으로 취소가 완료됩니다. 감사합니다.</p>
   </div>
 `;
