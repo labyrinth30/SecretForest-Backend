@@ -1,7 +1,47 @@
 # 2024-1 소프 캡스톤디자인 백엔드 레포지토리
 
 ### 프로젝트 구현에 사용된 기술과 버전
-![스크린샷 2024-06-19 오전 1.32.58.png](..%2F..%2F..%2F..%2F..%2Fvar%2Ffolders%2Fr5%2Fvfj4fjq91pn31kx4cdrlm6s40000gn%2FT%2FTemporaryItems%2FNSIRD_screencaptureui_iT9LAV%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202024-06-19%20%EC%98%A4%EC%A0%84%201.32.58.png)
+```
+"dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.2.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/jwt": "^10.2.0",
+    "@nestjs/mapped-types": "*",
+    "@nestjs/microservices": "^10.3.7",
+    "@nestjs/passport": "^10.0.3",
+    "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/schedule": "^4.0.2",
+    "@nestjs/swagger": "^7.3.0",
+    "@nestjs/typeorm": "^10.0.2",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/nodemailer": "^6.4.14",
+    "amqp-connection-manager": "^4.1.14",
+    "amqplib": "^0.10.4",
+    "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "joi": "^17.12.3",
+    "mysql2": "^3.9.7",
+    "nestjs-pino": "^4.0.0",
+    "nodemailer": "^6.9.13",
+    "passport": "^0.7.0",
+    "passport-github": "^1.1.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "pg": "^8.11.3",
+    "pino-http": "^9.0.0",
+    "pino-pretty": "^11.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.8.1",
+    "swagger-ui-express": "^5.0.0",
+    "typeorm": "^0.3.20"
+  },
+```
 
 ### 프로젝트 설치 및 실행
 * node.js와 docker가 설치되어 있어야 합니다.
