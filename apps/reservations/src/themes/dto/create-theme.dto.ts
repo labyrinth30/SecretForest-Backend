@@ -22,4 +22,10 @@ export class CreateThemeDto {
   @ArrayNotEmpty()
   @IsString({ each: true })
   timetable: string[]; // 테마의 타임테이블
+
+  @IsString()
+  genre: string; // 테마 장르
+
+  @IsString()
+  imageUrl: string; // 테마 이미지
 }

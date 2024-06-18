@@ -18,11 +18,36 @@ spec:
       - image: 699510596669.dkr.ecr.ap-northeast-2.amazonaws.com/auth:latest
         name: auth
         env:
-          - name: MONGODB_URI
+          - name: MYSQL_HOST
             valueFrom:
               secretKeyRef:
-                name: mongodb
-                key: connectionString
+                name: mysql
+                key: MYSQL_HOST
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: mysql
+                key: MYSQL_DATABASE
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql
+                key: MYSQL_PASSWORD
+          - name: MYSQL_PORT
+            valueFrom:
+              secretKeyRef:
+                name: mysql
+                key: MYSQL_PORT
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql
+                key: MYSQL_ROOT_PASSWORD
+          - name: MYSQL_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mysql
+                key: MYSQL_USERNAME
           - name: JWT_SECRET
             valueFrom:
               secretKeyRef:
@@ -44,6 +69,8 @@ spec:
               secretKeyRef:
                 name: google
                 key: callbackUrl
+          - name: RABBITMQ_URI
+            value: amqp://rabbitmq:5672
         ports:
           - containerPort: 3002
           - containerPort: 3003
