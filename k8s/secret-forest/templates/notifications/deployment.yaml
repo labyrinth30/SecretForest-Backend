@@ -34,5 +34,10 @@ spec:
               secretKeyRef:
                 name: google
                 key: refreshToken
+          - name: RABBITMQ_URI
+            valueFrom:
+                secretKeyRef:
+                    name: rabbitmq
+                    key: RABBITMQ_URI
         ports:
           - containerPort: 3000
