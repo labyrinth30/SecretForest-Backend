@@ -49,3 +49,7 @@
 2. `cd` 로 프로젝트 폴더로 이동합니다.
 3. 'docker-compose up --build' 명령어를 실행하여 프로젝트를 빌드하고 실행합니다.
 4. `http://localhost:3000`으로 접속하여 프로젝트를 확인합니다.(true가 반환됩니다.)
+
+* 환경변수 적용을 위해서
+5. 환경변수는 k8s/secret-forest/secret.yaml에 저장되어 있습니다.(원래 프로젝트에는 없습니다만 테스트를 위해 추가하였습니다.)
+6. `kubectl apply -f k8s/secret-forest/secret.yaml` 명령어를 실행하여 secret을 생성합니다.
